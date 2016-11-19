@@ -15,7 +15,7 @@
     "semantic-release": "^6.3.2"
   },
   "scripts": {
-    "test": "node -e \"require('babel-register')({ presets: ['es2015', 'react'] }) || require('./test.js')\"",
+    "test": "node -e \"require('babel-register')({ presets: ['es2015', 'react'] }) || require('./test/unit.js')\"",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "dependencies": {

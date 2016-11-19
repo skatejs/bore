@@ -1,6 +1,6 @@
 require('jsdom-global')();
 
-// Basic registry mock.
+// Basic registry mock must go before things that might use it.
 const customElements = window.customElements = {
   registry: {},
   define (name, Ctor) {
@@ -12,8 +12,11 @@ const customElements = window.customElements = {
 };
 
 const tape = require('tape');
-const React = require('.').default;
-const { mount, shallow } = require('.');
+
+// This actually isn't React, this is just simpler because that's the default
+// JSX pragma.
+const React = require('../src').default;
+const { mount, shallow } = require('../src');
 
 tape('creating elements by local name', ({ equal, end }) => {
   equal(<input />.localName, 'input');
