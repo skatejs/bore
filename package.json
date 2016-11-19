@@ -1,7 +1,7 @@
 {
   "name": "mole",
   "description": "Enzyme-like testing for the DOM.",
-  "main": "index.js",
+  "main": "src/index.js",
   "author": "Trey Shugart <treshugart@gmail.com>",
   "license": "MIT",
   "devDependencies": {

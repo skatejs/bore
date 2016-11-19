@@ -8,19 +8,19 @@ function shouldBeAttr (key, val) {
   return startsWith(key, 'aria-') || startsWith(key, 'data-');
 }
 
-const JsxToDom = {
-  createElement (name, attrs, ...chren) {
-    const node = typeof name === 'function' ? name() : document.createElement(name);
-    Object.keys(attrs || []).forEach(attr =>
-      shouldBeAttr(attr, attrs[attr])
-        ? node.setAttribute(attr, attrs[attr])
-        : (node[attr] = attrs[attr]));
-    chren.forEach(child => node.appendChild(child instanceof Node ? child : document.createTextNode(child)));
-    return node;
-  }
-};
+function handleFunction (Fn) {
+  return Fn.prototype instanceof HTMLElement ? new Fn() : Fn();
+}
 
-export default JsxToDom;
+export function h (name, attrs, ...chren) {
+  const node = typeof name === 'function' ? handleFunction(name) : document.createElement(name);
+  Object.keys(attrs || []).forEach(attr =>
+    shouldBeAttr(attr, attrs[attr])
+      ? node.setAttribute(attr, attrs[attr])
+      : (node[attr] = attrs[attr]));
+  chren.forEach(child => node.appendChild(child instanceof Node ? child : document.createTextNode(child)));
+  return node;
+}
 
 
 
@@ -91,18 +91,29 @@ class Wrapper {
 
   find (query) {
     let temp = [];
-    if (typeof query === 'function') {
+
+    // Custom element constructors
+    if (query.prototype instanceof HTMLElement) {
+      this.walk(
+        this.shadowRoot,
+        node => node instanceof query,
+        node => temp.push(node)
+      );
+    // Custom filtering function
+    } else if (typeof query === 'function') {
       this.walk(
         this.shadowRoot,
         query,
         node => temp.push(node)
       );
+    // Diffing node trees
     } else if (query instanceof HTMLElement) {
       this.walk(
         this.shadowRoot,
         node => diff({ destination: query, source: node, root: true }).length === 0,
         node => temp.push(node)
       );
+    // Using an object as criteria
     } else if (typeof query === 'object') {
       const keys = Object.keys(query);
       if (keys.length === 0) {
@@ -113,6 +124,7 @@ class Wrapper {
         node => keys.every(key => node[key] === query[key]),
         node => temp.push(node)
       );
+    // Selector
     } else if (typeof query === 'string') {
       this.walk(
         this.shadowRoot,
@@ -121,21 +133,12 @@ class Wrapper {
         { skip: true }
       );
     }
-    return temp.map(n => new Wrapper(n, this.opts));
-  }
 
-  shouldIncludeNode (node) {
-    const { parentNode } = node;
-    return !this.opts.shallow || (
-      customElements &&
-      parentNode &&
-      !customElements.get(parentNode.localName)
-    );
+    return temp.map(n => new Wrapper(n, this.opts));
   }
 
   walk (node, query, callback, opts = { skip: false }) {
     const acceptNode = node =>
-      this.shouldIncludeNode(node) &&
       query(node)
         ? NodeFilter.FILTER_ACCEPT
         : opts.skip ? NodeFilter.FILTER_SKIP : NodeFilter.FILTER_REJECT;
@@ -154,9 +157,5 @@ class Wrapper {
 }
 
 export function mount (elem) {
-  return new Wrapper(elem, { shallow: false });
-}
-
-export function shallow (elem) {
-  return new Wrapper(elem, { shallow: true });
+  return new Wrapper(elem);
 }

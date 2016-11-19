@@ -1,3 +1,5 @@
+/* @jsx h */
+
 require('jsdom-global')();
 
 // Basic registry mock must go before things that might use it.
@@ -13,10 +15,8 @@ const customElements = window.customElements = {
 
 const tape = require('tape');
 
-// This actually isn't React, this is just simpler because that's the default
-// JSX pragma.
-const React = require('../src').default;
-const { mount, shallow } = require('../src');
+// eslint-disable-next-line no-unused-vars
+const { h, mount } = require('../src');
 
 tape('creating elements by local name', ({ equal, end }) => {
   equal(<input />.localName, 'input');
@@ -118,11 +118,5 @@ tape('mount: should descend into custom elements', ({ equal, end }) => {
   const ce = mockCustomElement(mount);
   equal(ce.find('span').length, 1);
   equal(ce.find('span')[0].node.localName, 'span');
-  end();
-});
-
-tape('shallow: should not descend into custom elements', ({ equal, end }) => {
-  const ce = mockCustomElement(shallow);
-  equal(ce.find('span').length, 0);
   end();
 });
