@@ -28,7 +28,7 @@ Since web components are an extension of the HTML standard, Mole inherently work
 1. The custom element polyfill is supported by calling `flush()` after mounting the nodes so things appear synchronous.
 2. Nodes are mounted to a fixture that is always kept in the DOM (even if it's removed, it will put itself back). This is so that custom elements can go through their natural lifecycle.
 3. The fixture is cleaned up on every mount, so there's no need to cleanup after your last mount.
-4. The `attachShadow()` method is overridden to *always* provide an `open` shadow root. Therefore there is always a `shadowRoot` property and it can be queried against. 
+4. The `attachShadow()` method is overridden to *always* provide an `open` shadow root so that there is always a `shadowRoot` property and it can be queried against. 
 
 
 
@@ -75,7 +75,7 @@ The `h` function prefers props unless it's something that *must* be set as an at
 
 ### `mount(htmlOrNode)`
 
-The mount function takes a string and converts it to a node, or a node directly and returns a wrapper around 
+The mount function takes a node, or a string - and converts it to a node - and returns a wrapper around it. 
 
 ```js
 import { mount, h } from 'mole';
