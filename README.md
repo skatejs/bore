@@ -110,7 +110,7 @@ You can use element constructors to search for nodes in a tree.
 mount(<div><span /></div>).all(HTMLSpanElement);
 ```
 
-Since custom elements are just extensions of HTML elements, you can do it in the sme exact way:
+Since custom elements are just extensions of HTML elements, you can do it in the same exact way:
 
 ```js
 class MyElement extends HTMLElement {};
