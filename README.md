@@ -12,7 +12,7 @@ Mole makes testing the DOM simpler in the same way Enzyme makes testing React si
 
 ```js
 const wrapper = mount(<div><span>test</span></div>);
-console.log(wrapper.find(<span>test</span>)[0].node.localName);
+console.log(wrapper.all(<span>test</span>)[0].node.localName);
 // span
 ```
 
@@ -85,7 +85,7 @@ const wrapper = mount(<MyElement />);
 
 
 
-### find(query)
+### all(query)
 
 You can search using pretty much anything and it will return an array of wrapped nodes that matched the query.
 
@@ -96,7 +96,7 @@ You can search using pretty much anything and it will return an array of wrapped
 You can use element constructors to search for nodes in a tree.
 
 ```js
-mount(<div><span /></div>).find(HTMLSpanElement);
+mount(<div><span /></div>).all(HTMLSpanElement);
 ```
 
 Since custom elements are just extensions of HTML elements, you can do it in the sme exact way:
@@ -105,7 +105,7 @@ Since custom elements are just extensions of HTML elements, you can do it in the
 class MyElement extends HTMLElement {};
 customElements.define('my-element', MyElement);
 
-mount(<div><my-element /></div>).find(MyElement);
+mount(<div><my-element /></div>).all(MyElement);
 ```
 
 
@@ -115,7 +115,7 @@ mount(<div><my-element /></div>).find(MyElement);
 Custom filtering functions are simply functions that take a single node argument.
 
 ```js
-mount(<div><span /></div>).find(node => node.localName === 'span');
+mount(<div><span /></div>).all(node => node.localName === 'span');
 ```
 
 
@@ -125,13 +125,13 @@ mount(<div><span /></div>).find(node => node.localName === 'span');
 You can mount a node and search using a different node instance as long as it looks the same.
 
 ```js
-mount(<div><span /></div>).find(<span />);
+mount(<div><span /></div>).all(<span />);
 ```
 
 The node trees must match exactly, so this will not work.
 
 ```js
-mount(<div><span>test</span></div>).find(<span />);
+mount(<div><span>test</span></div>).all(<span />);
 ```
 
 
@@ -141,13 +141,13 @@ mount(<div><span>test</span></div>).find(<span />);
 You can pass an object and it will match the properties on the object to the properties on the element.
 
 ```js
-mount(<div><span id="test" /></div>).find({ id: 'test' });
+mount(<div><span id="test" /></div>).all({ id: 'test' });
 ```
 
 The objects must completely match, so this will not work.
 
 ```js
-mount(<div><span id="test" /></div>).find({ id: 'test', somethingElse: true });
+mount(<div><span id="test" /></div>).all({ id: 'test', somethingElse: true });
 ```
 
 
@@ -156,7 +156,7 @@ mount(<div><span id="test" /></div>).find({ id: 'test', somethingElse: true });
 You can pass a string and it will try and use it as a selector.
 
 ```js
-mount(<div><span id="test" /></div>).find('#test');
+mount(<div><span id="test" /></div>).all('#test');
 ```
 
 
