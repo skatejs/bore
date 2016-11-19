@@ -2,7 +2,7 @@
 
 *Work in progress.*
 
-Enzyme-like testing for the DOM.
+Enzyme-like testing helper for the DOM.
 
 
 
@@ -64,14 +64,7 @@ The mount function takes a string and converts it to a node, or a node directly 
 ```js
 import { mount, h } from 'mole';
 
-const MyElement extends HTMLElement {
-  connectedCallbakc () {
-    this.attachShadow({ mode: 'open' });
-    this.shadowRoot.innerHTML = '<span>test</span>';
-  }
-}
-
-mount(<MyElement />).contains(<span>test</span>)).to.equal(true);
+mount(<div><span /></div>);
 ```
 
 
@@ -160,3 +153,21 @@ mount(<div><span id="test" /></div>).all('#test');
 ```
 
 
+
+### one(query)
+
+Same as `all(query)` but only returns a single wrapped node.
+
+```js
+mount(<div><span /></div>).one(<span />);
+```
+
+
+
+### has(query)
+
+Same as `all(query)` but returns true or false if the query returned results.
+
+```js
+mount(<div><span /></div>).has(<span />);
+```
