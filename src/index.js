@@ -89,6 +89,10 @@ class Wrapper {
     this.shadowRoot = node.shadowRoot || node;
   }
 
+  contains (query) {
+    return !!this.find(query)[0];
+  }
+
   find (query) {
     let temp = [];
 

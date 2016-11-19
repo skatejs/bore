@@ -108,6 +108,13 @@ tape('mount: find(function)', ({ equal, end }) => {
 
 
 
+tape('mount: contains', ({ equal, end }) => {
+  equal(mount(<div><span /></div>).contains(<span />), true);
+  end();
+});
+
+
+
 function mockCustomElement (fn) {
   // We don't need a constructor, just something that is returned from get().
   customElements.define('x-test', true);
