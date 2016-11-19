@@ -2,7 +2,7 @@
 
 *Work in progress.*
 
-[Enzyme](https://github.com/airbnb/enzyme)-like testing helper for the DOM.
+[Enzyme](https://github.com/airbnb/enzyme)-like testing utility built for the DOM and Web Components.
 
 
 
