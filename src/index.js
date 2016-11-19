@@ -89,11 +89,7 @@ class Wrapper {
     this.shadowRoot = node.shadowRoot || node;
   }
 
-  contains (query) {
-    return !!this.find(query)[0];
-  }
-
-  find (query) {
+  all (query) {
     let temp = [];
 
     // Custom element constructors
@@ -139,6 +135,14 @@ class Wrapper {
     }
 
     return temp.map(n => new Wrapper(n, this.opts));
+  }
+
+  has (query) {
+    return !!this.one(query);
+  }
+
+  one (query) {
+    return this.all(query)[0];
   }
 
   walk (node, query, callback, opts = { skip: false }) {

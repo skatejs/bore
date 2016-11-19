@@ -49,67 +49,74 @@ tape('setting attributes', ({ equal, end }) => {
   end();
 });
 
-tape('mount: find(string)', ({ equal, end }) => {
+tape('mount: all(string)', ({ equal, end }) => {
   const div = mount(
     <div>
       <span id="test1">test1</span>
       <span id="test2">test2</span>
     </div>
   );
-  equal(div.find('div').length, 0);
-  equal(div.find('span').length, 2);
-  equal(div.find('#test1').length, 1);
-  equal(div.find('#test2').length, 1);
-  equal(div.find('#test3').length, 0);
+  equal(div.all('div').length, 0);
+  equal(div.all('span').length, 2);
+  equal(div.all('#test1').length, 1);
+  equal(div.all('#test2').length, 1);
+  equal(div.all('#test3').length, 0);
   end();
 });
 
-tape('mount: find(node)', ({ equal, end }) => {
+tape('mount: all(node)', ({ equal, end }) => {
   const div = mount(
     <div>
       <span id="test1">test1</span>
       <span id="test2">test2</span>
     </div>
   );
-  equal(div.find(<div />).length, 0);
-  equal(div.find(<span />).length, 0);
-  equal(div.find(<span id="test1" />).length, 0);
-  equal(div.find(<span id="test1">test1</span>).length, 1);
-  equal(div.find(<span id="test2">test2</span>).length, 1);
-  equal(div.find(<span id="test3">test3</span>).length, 0);
+  equal(div.all(<div />).length, 0);
+  equal(div.all(<span />).length, 0);
+  equal(div.all(<span id="test1" />).length, 0);
+  equal(div.all(<span id="test1">test1</span>).length, 1);
+  equal(div.all(<span id="test2">test2</span>).length, 1);
+  equal(div.all(<span id="test3">test3</span>).length, 0);
   end();
 });
 
-tape('mount: find(object)', ({ equal, end }) => {
+tape('mount: all(object)', ({ equal, end }) => {
   const div = mount(
     <div>
       <span id="test1">test1</span>
       <span id="test2">test2</span>
     </div>
   );
-  equal(div.find({}).length, 0);
-  equal(div.find({ localName: 'test1' }).length, 0);
-  equal(div.find({ id: 'test1' }).length, 1);
-  equal(div.find({ id: 'test2' }).length, 1);
-  equal(div.find({ id: 'test3' }).length, 0);
+  equal(div.all({}).length, 0);
+  equal(div.all({ localName: 'test1' }).length, 0);
+  equal(div.all({ id: 'test1' }).length, 1);
+  equal(div.all({ id: 'test2' }).length, 1);
+  equal(div.all({ id: 'test3' }).length, 0);
   end();
 });
 
-tape('mount: find(function)', ({ equal, end }) => {
+tape('mount: all(function)', ({ equal, end }) => {
   const div = mount(
     <div>
       <span id="test1">test1</span>
       <span id="test2">test2</span>
     </div>
   );
-  equal(div.find(n => n.localName === 'span').length, 2);
+  equal(div.all(n => n.localName === 'span').length, 2);
   end();
 });
 
 
 
-tape('mount: contains', ({ equal, end }) => {
-  equal(mount(<div><span /></div>).contains(<span />), true);
+tape('mount: has', ({ equal, end }) => {
+  equal(mount(<div><span /></div>).has(<span />), true);
+  end();
+});
+
+
+
+tape('mount: one', ({ equal, end }) => {
+  equal(mount(<div><span /></div>).one(<span />).node.localName, 'span');
   end();
 });
 
@@ -123,7 +130,7 @@ function mockCustomElement (fn) {
 
 tape('mount: should descend into custom elements', ({ equal, end }) => {
   const ce = mockCustomElement(mount);
-  equal(ce.find('span').length, 1);
-  equal(ce.find('span')[0].node.localName, 'span');
+  equal(ce.all('span').length, 1);
+  equal(ce.all('span')[0].node.localName, 'span');
   end();
 });
