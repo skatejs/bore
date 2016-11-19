@@ -1,0 +1,34 @@
+{
+  "name": "mole",
+  "description": "Enzyme-like testing for the DOM.",
+  "main": "index.js",
+  "author": "Trey Shugart <treshugart@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-preset-react": "^6.16.0",
+    "babel-register": "^6.18.0",
+    "cz-conventional-changelog": "^1.2.0",
+    "jsdom": "^9.8.3",
+    "jsdom-global": "^2.1.0",
+    "skatejs-build": "^12.1.0",
+    "tape": "^4.6.2",
+    "semantic-release": "^6.3.2"
+  },
+  "scripts": {
+    "test": "node -e \"require('babel-register')({ presets: ['es2015', 'react'] }) || require('./test.js')\"",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+  },
+  "dependencies": {
+    "babel-preset-es2015": "^6.18.0",
+    "skatejs-dom-diff": "^0.4.2"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/treshugart/mole.git"
+  }
+}
