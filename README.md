@@ -18,6 +18,19 @@ console.log(wrapper.one('span')[0].node.localName);
 
 
 
+## Using with web components
+
+Since web components are an extension of the HTML standard, Mole inherently works with it. However there are a few things that it does underneath the hood that should be noted.
+
+1. The custom element polyfill is supported by calling `flush()` after mounting the nodes so things appear synchronous.
+2. Nodes are mounted to a fixture that is always kept in the DOM (even if it's removed, it will put itself back). This is so that custom elements can go through their natural lifecycle.
+3. The fixture is cleaned up on every mount, so there's no need to cleanup after your last mount.
+4. The `attachShadow()` method is overridden to *always* provide an `open` shadow root. Therefore there is always a `shadowRoot` property and it can be queried against. 
+
+
+
+
+
 ## API
 
 Since Shadow DOM hides implementation details, it negates having to provide a way to do shallow rendering. Therefore, we only need to provide a simple way to wrap a component.
