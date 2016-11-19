@@ -11,8 +11,8 @@ Enzyme-like testing helper for the DOM.
 Mole makes testing the DOM simpler in the same way Enzyme makes testing React simpler. It's built with Web Components in mind and follows similar conventions to Enzyme, but the APIs won't map 1:1.
 
 ```js
-const wrapper = mount(<div><span>test</span></div>);
-console.log(wrapper.all(<span>test</span>)[0].node.localName);
+const wrapper = mount(<div><span /></div>);
+console.log(wrapper.one('span')[0].node.localName);
 // span
 ```
 
@@ -73,8 +73,10 @@ mount(<div><span /></div>);
 A wrapper is returned when you call `mount()`:
 
 ```js
-const wrapper = mount(<MyElement />);
+const wrapper = mount(<div><span /></div>);
 ```
+
+The wrapper contains several methods and properties that you can use to test your DOM.
 
 
 
