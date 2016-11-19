@@ -11,9 +11,12 @@
 Mole makes testing the DOM simpler in the same way Enzyme makes testing React simpler. It's built with Web Components in mind and follows similar conventions to Enzyme, but the APIs won't map 1:1.
 
 ```js
+/* @jsx h */
+import { h, mount }
+
 const wrapper = mount(<div><span /></div>);
-console.log(wrapper.one('span')[0].node.localName);
-// span
+console.log(wrapper.one('span').node.localName);
+// "span"
 ```
 
 
