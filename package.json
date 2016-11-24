@@ -18,10 +18,11 @@
     "jsdom-global": "^2.1.0",
     "semantic-release": "^6.3.2",
     "skatejs-build": "^12.1.0",
+    "skatejs-web-components": "^5.0.0",
     "tape": "^4.6.2"
   },
   "scripts": {
-    "test": "node -e \"require('babel-register')({ presets: ['es2015', 'react'] }) || require('./test/unit.js')\"",
+    "test": "sk-tests",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "dependencies": {

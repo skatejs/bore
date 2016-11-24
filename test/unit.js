@@ -1,136 +1,119 @@
+/* eslint-env jasmine, mocha */
 /* @jsx h */
 
-require('jsdom-global')();
-
-// Basic registry mock must go before things that might use it.
-const customElements = window.customElements = {
-  registry: {},
-  define (name, Ctor) {
-    this.registry[name] = Ctor;
-  },
-  get (name) {
-    return this.registry[name];
-  }
-};
-
-const tape = require('tape');
+// We include these manually because ShadyCSS adds extra output which the tests
+// arent't expecting. We also have to put the native-shim through babel because
+// it's being pulled in from the node_modules directory which is excluded by
+// default.
+import 'babel?presets[]=es2015!skatejs-web-components/src/native-shim';
+import 'babel?presets[]=es2015!@webcomponents/custom-elements/src/custom-elements';
+import '@webcomponents/shadydom';
 
 // eslint-disable-next-line no-unused-vars
-const { h, mount } = require('../src');
+import { h, mount } from '../src';
 
-tape('creating elements by local name', ({ equal, end }) => {
-  equal(<input />.localName, 'input');
-  equal(<test />.localName, 'test');
-  equal(<custom-element />.localName, 'custom-element');
-  end();
-});
+const { customElements, HTMLElement } = window;
 
-tape('creating elements by function', ({ equal, end }) => {
-  const Fn = () => <div />
-  equal(<Fn />.localName, 'div');
-  end();
-});
+describe('bore', () => {
+  it('creating elements by local name', () => {
+    expect(<input />.localName).to.equal('input');
+    expect(<test />.localName).to.equal('test');
+    expect(<custom-element />.localName).to.equal('custom-element');
+  });
 
-tape('setting attributes', ({ equal, end }) => {
-  const div = <div
-    aria-test="aria something"
-    data-test="data something"
-    test1="test something"
-    test2={1}
-  />;
-  equal(div.getAttribute('aria-test'), 'aria something');
-  equal(div.getAttribute('data-test'), 'data something');
-  equal(div.hasAttribute('test1'), false);
-  equal(div.hasAttribute('test2'), false);
-  equal(div['aria-test'], undefined);
-  equal(div['data-test'], undefined);
-  equal(div.test1, 'test something');
-  equal(div.test2, 1);
-  end();
-});
+  it('creating elements by function', () => {
+    const Fn = () => <div />;
+    expect(<Fn />.localName).to.equal('div');
+  });
 
-tape('mount: all(string)', ({ equal, end }) => {
-  const div = mount(
-    <div>
-      <span id="test1">test1</span>
-      <span id="test2">test2</span>
-    </div>
-  );
-  equal(div.all('div').length, 0);
-  equal(div.all('span').length, 2);
-  equal(div.all('#test1').length, 1);
-  equal(div.all('#test2').length, 1);
-  equal(div.all('#test3').length, 0);
-  end();
-});
+  it('setting attributes', () => {
+    const div = <div
+      aria-test='aria something'
+      data-test='data something'
+      test1='test something'
+      test2={1}
+    />;
+    expect(div.getAttribute('aria-test')).to.equal('aria something');
+    expect(div.getAttribute('data-test')).to.equal('data something');
+    expect(div.hasAttribute('test1')).to.equal(false);
+    expect(div.hasAttribute('test2')).to.equal(false);
+    expect(div['aria-test']).to.equal(undefined);
+    expect(div['data-test']).to.equal(undefined);
+    expect(div.test1).to.equal('test something');
+    expect(div.test2).to.equal(1);
+  });
 
-tape('mount: all(node)', ({ equal, end }) => {
-  const div = mount(
-    <div>
-      <span id="test1">test1</span>
-      <span id="test2">test2</span>
-    </div>
-  );
-  equal(div.all(<div />).length, 0);
-  equal(div.all(<span />).length, 0);
-  equal(div.all(<span id="test1" />).length, 0);
-  equal(div.all(<span id="test1">test1</span>).length, 1);
-  equal(div.all(<span id="test2">test2</span>).length, 1);
-  equal(div.all(<span id="test3">test3</span>).length, 0);
-  end();
-});
+  it('mount: all(string)', () => {
+    const div = mount(
+      <div>
+        <span id='test1'>test1</span>
+        <span id='test2'>test2</span>
+      </div>
+    );
+    expect(div.all('div').length).to.equal(0);
+    expect(div.all('span').length).to.equal(2);
+    expect(div.all('#test1').length).to.equal(1);
+    expect(div.all('#test2').length).to.equal(1);
+    expect(div.all('#test3').length).to.equal(0);
+  });
 
-tape('mount: all(object)', ({ equal, end }) => {
-  const div = mount(
-    <div>
-      <span id="test1">test1</span>
-      <span id="test2">test2</span>
-    </div>
-  );
-  equal(div.all({}).length, 0);
-  equal(div.all({ localName: 'test1' }).length, 0);
-  equal(div.all({ id: 'test1' }).length, 1);
-  equal(div.all({ id: 'test2' }).length, 1);
-  equal(div.all({ id: 'test3' }).length, 0);
-  end();
-});
+  it('mount: all(node)', () => {
+    const div = mount(
+      <div>
+        <span id='test1'>test1</span>
+        <span id='test2'>test2</span>
+      </div>
+    );
+    expect(div.all(<div />).length).to.equal(0);
+    expect(div.all(<span />).length).to.equal(0);
+    expect(div.all(<span id='test1' />).length).to.equal(0);
+    expect(div.all(<span id='test1'>test1</span>).length).to.equal(1);
+    expect(div.all(<span id='test2'>test2</span>).length).to.equal(1);
+    expect(div.all(<span id='test3'>test3</span>).length).to.equal(0);
+  });
 
-tape('mount: all(function)', ({ equal, end }) => {
-  const div = mount(
-    <div>
-      <span id="test1">test1</span>
-      <span id="test2">test2</span>
-    </div>
-  );
-  equal(div.all(n => n.localName === 'span').length, 2);
-  end();
-});
+  it('mount: all(object)', () => {
+    const div = mount(
+      <div>
+        <span id='test1'>test1</span>
+        <span id='test2'>test2</span>
+      </div>
+    );
+    expect(div.all({}).length).to.equal(0);
+    expect(div.all({ localName: 'test1' }).length).to.equal(0);
+    expect(div.all({ id: 'test1' }).length).to.equal(1);
+    expect(div.all({ id: 'test2' }).length).to.equal(1);
+    expect(div.all({ id: 'test3' }).length).to.equal(0);
+  });
 
+  it('mount: all(function)', () => {
+    const div = mount(
+      <div>
+        <span id='test1'>test1</span>
+        <span id='test2'>test2</span>
+      </div>
+    );
+    expect(div.all(n => n.localName === 'span').length).to.equal(2);
+  });
 
+  it('mount: has', () => {
+    expect(mount(<div><span /></div>).has(<span />)).to.equal(true);
+  });
 
-tape('mount: has', ({ equal, end }) => {
-  equal(mount(<div><span /></div>).has(<span />), true);
-  end();
-});
+  it('mount: one', () => {
+    expect(mount(<div><span /></div>).one(<span />).node.localName).to.equal('span');
+  });
 
-
-
-tape('mount: one', ({ equal, end }) => {
-  equal(mount(<div><span /></div>).one(<span />).node.localName, 'span');
-  end();
-});
-
-
-
-function mockCustomElement (fn) {
-  // We don't need a constructor, just something that is returned from get().
-  customElements.define('x-test', true);
-  return fn(<x-test><x-test><span /></x-test></x-test>);
-}
-
-tape('mount: should descend into custom elements', ({ equal, end }) => {
-  const ce = mockCustomElement(mount);
-  equal(ce.all('span').length, 1);
-  equal(ce.all('span')[0].node.localName, 'span');
-  end();
+  it('mount: should descend into custom elements', () => {
+    class Test extends HTMLElement {
+      connectedCallback () {
+        this.attachShadow({ mode: 'open' });
+        this.shadowRoot.innerHTML = '<span></span>';
+      }
+    }
+    customElements.define('x-test', Test);
+    const test = mount(<Test />);
+    expect(test.all('span').length).to.equal(1);
+    expect(test.all('span')[0].node.localName).to.equal('span');
+  });
 });

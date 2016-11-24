@@ -1,4 +1,5 @@
-const { Node } = window;
+const { DocumentFragment, Node } = window;
+const { slice } = [];
 
 function startsWith (key, val) {
   return key.indexOf(val) === 0;
@@ -66,12 +67,13 @@ class Wrapper {
     this.node = typeof node === 'string' ? nodeFromHtml(node) : node;
     this.opts = opts;
 
+    const customElementDefinition = customElements.get(this.node.localName);
     const isRootNode = !node.parentNode;
 
     // If this is a new node, clean up the fixture.
     if (isRootNode) {
       fixture.innerHTML = '';
-      flush();
+      customElementDefinition && flush();
     }
 
     // If the fixture has been removed from the document, re-insert it.
@@ -82,7 +84,7 @@ class Wrapper {
     // Add the node to the fixture so it runs the connectedCallback().
     if (isRootNode) {
       fixture.appendChild(node);
-      flush();
+      customElementDefinition && flush();
     }
 
     // If there's no shadow root, our queries run from the host.
@@ -107,7 +109,11 @@ class Wrapper {
         node => temp.push(node)
       );
     // Diffing node trees
-    } else if (query instanceof HTMLElement) {
+    //
+    // We have to check if the node type is an element rather than checking
+    // instanceof because the ShadyDOM polyfill seems to fail the prototype
+    // chain lookup.
+    } else if (query.nodeType === Node.ELEMENT_NODE) {
       this.walk(
         this.shadowRoot,
         node => diff({ destination: query, source: node, root: true }).length === 0,
@@ -145,7 +151,22 @@ class Wrapper {
     return this.all(query)[0];
   }
 
-  walk (node, query, callback, opts = { skip: false }) {
+  walk (node, query, callback, opts = { root: false, skip: false }) {
+    // The ShadyDOM polyfill creates a shadow root that is a <div /> but is an
+    // instanceof a DocumentFragment. For some reason a tree walker can't
+    // traverse it, so we must traverse each child. Due to this implementation
+    // detail, we must also tell the walker to include the root node, which it
+    // doesn't do with the default implementation.
+    if (node instanceof DocumentFragment) {
+      slice.call(node.children).forEach(child => {
+        this.walk(child, query, callback, {
+          root: true,
+          skip: opts.skip
+        });
+      });
+      return;
+    }
+
     const acceptNode = node =>
       query(node)
         ? NodeFilter.FILTER_ACCEPT
@@ -156,6 +177,11 @@ class Wrapper {
 
     // Last argument here is for IE.
     const tree = document.createTreeWalker(node, NodeFilter.SHOW_ELEMENT, acceptNode, true);
+
+    // Include the main node.
+    if (opts.root && query(node)) {
+      callback(node);
+    }
 
     // Call user callback for each node.
     while (tree.nextNode()) {
