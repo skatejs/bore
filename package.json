@@ -25,7 +25,6 @@
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "dependencies": {
-    "bore": "latest",
     "skatejs-dom-diff": "^0.4.2"
   },
   "config": {
