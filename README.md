@@ -1,18 +1,18 @@
-# mole
+# bore
 
 *Work in progress.*
 
 [Enzyme](https://github.com/airbnb/enzyme)-like testing utility built for the DOM and Web Components.
 
 ```sh
-npm install mole --save-dev
+npm install bore --save-dev
 ```
 
 
 
 ## Usage
 
-Mole makes testing the DOM simpler in the same way Enzyme makes testing React simpler. It's built with Web Components in mind and follows similar conventions to Enzyme, but the APIs won't map 1:1.
+Bore makes testing the DOM simpler in the same way Enzyme makes testing React simpler. It's built with Web Components in mind and follows similar conventions to Enzyme, but the APIs won't map 1:1.
 
 ```js
 /* @jsx h */
@@ -27,7 +27,7 @@ console.log(wrapper.one('span').node.localName);
 
 ## Using with web components
 
-Since web components are an extension of the HTML standard, Mole inherently works with it. However there are a few things that it does underneath the hood that should be noted.
+Since web components are an extension of the HTML standard, Bore inherently works with it. However there are a few things that it does underneath the hood that should be noted.
 
 1. The custom element polyfill is supported by calling `flush()` after mounting the nodes so things appear synchronous.
 2. Nodes are mounted to a fixture that is always kept in the DOM (even if it's removed, it will put itself back). This is so that custom elements can go through their natural lifecycle.
@@ -46,11 +46,11 @@ Since Shadow DOM hides implementation details, it negates having to provide a wa
 
 ### `h(name, attrsOrProps, ...children)`
 
-Mole ships with a simple JSX to DOM function that you can use as your JSX pragma, if that's your sort of thing.
+Bore ships with a simple JSX to DOM function that you can use as your JSX pragma, if that's your sort of thing.
 
 ```js
 /* @jsx h */
-import { h } from 'mole';
+import { h } from 'bore';
 
 console.log(<div />.localName);
 // "div"
@@ -59,7 +59,7 @@ console.log(<div />.localName);
 If you don't want to configure the pragma and you want to just leave it as React, you can do the following:
 
 ```js
-import { h } from 'mole';
+import { h } from 'bore';
 
 const React = { createElement: h };
 
@@ -82,7 +82,7 @@ The `h` function prefers props unless it's something that *must* be set as an at
 The mount function takes a node, or a string - and converts it to a node - and returns a wrapper around it. 
 
 ```js
-import { mount, h } from 'mole';
+import { mount, h } from 'bore';
 
 mount(<div><span /></div>);
 ```

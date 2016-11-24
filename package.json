@@ -1,5 +1,5 @@
 {
-  "name": "mole",
+  "name": "bore",
   "description": "Enzyme-like testing for the DOM.",
   "main": "src/index.js",
   "author": "Trey Shugart <treshugart@gmail.com>",
@@ -29,7 +29,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/treshugart/mole.git"
-  },
-  "version": "0.0.0"
+    "url": "https://github.com/treshugart/bore.git"
+  }
 }
