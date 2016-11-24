@@ -4,6 +4,10 @@
 
 [Enzyme](https://github.com/airbnb/enzyme)-like testing utility built for the DOM and Web Components.
 
+```sh
+npm install mole --save-dev
+```
+
 
 
 ## Usage
