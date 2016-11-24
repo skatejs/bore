@@ -2,6 +2,7 @@
   "name": "bore",
   "description": "Enzyme-like testing for the DOM.",
   "main": "dist/index.js",
+  "jsnext:main": "src/index.js",
   "author": "Trey Shugart <treshugart@gmail.com>",
   "license": "MIT",
   "files": [
