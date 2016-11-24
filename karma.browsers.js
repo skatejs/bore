@@ -17,29 +17,29 @@ const browsers = {
   chrome_canary_osx: {
     browserName: 'chrome',
     platform: 'OS X 10.11',
-    version: 'dev',
+    version: 'dev'
   },
   chrome_latest_osx: {
     browserName: 'chrome',
     platform: 'OS X 10.11',
-    version: 'latest',
+    version: 'latest'
   },
   chrome_latest_1: {
     browserName: 'chrome',
     platform: 'OS X 10.11',
-    version: 'latest-1',
+    version: 'latest-1'
   },
 
   // Firefox
   firefox_latest_osx: {
     browserName: 'firefox',
     platform: 'OS X 10.11',
-    version: 'latest',
+    version: 'latest'
   },
   firefox_latest_1: {
     browserName: 'firefox',
     platform: 'OS X 10.11',
-    version: 'latest-1',
+    version: 'latest-1'
   },
 
   // Safari (<= 8 is severely crippled)
@@ -53,15 +53,15 @@ const browsers = {
   internet_explorer_11: {
     browserName: 'internet explorer',
     platform: 'Windows 10',
-    version: '11',
+    version: '11'
   },
 
   // Edge
   microsoftedge_latest: {
     browserName: 'microsoftedge',
     platform: 'Windows 10',
-    version: 'latest',
-  },
+    version: 'latest'
+  }
 };
 
 Object.keys(browsers).forEach((key) => {

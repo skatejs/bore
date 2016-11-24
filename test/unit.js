@@ -6,7 +6,7 @@
 // it's being pulled in from the node_modules directory which is excluded by
 // default.
 import 'babel?presets[]=es2015!skatejs-web-components/src/native-shim';
-import 'babel?presets[]=es2015!@webcomponents/custom-elements/src/custom-elements';
+import '@webcomponents/custom-elements';
 import '@webcomponents/shadydom';
 
 // eslint-disable-next-line no-unused-vars

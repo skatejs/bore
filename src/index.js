@@ -23,8 +23,6 @@ export function h (name, attrs, ...chren) {
   return node;
 }
 
-
-
 const { customElements, HTMLElement, NodeFilter } = window;
 const { body } = document;
 const { attachShadow } = HTMLElement.prototype;
