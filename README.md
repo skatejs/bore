@@ -100,7 +100,18 @@ The wrapper contains several methods and properties that you can use to test you
 
 
 
-### all(query)
+### `node`
+
+Returns the node the wrapper is representing.
+
+```js
+// div
+mount(<div />).node.localName;
+```
+
+
+
+### `all(query)`
 
 You can search using pretty much anything and it will return an array of wrapped nodes that matched the query.
 
@@ -176,7 +187,7 @@ mount(<div><span id="test" /></div>).all('#test');
 
 
 
-### one(query)
+### `one(query)`
 
 Same as `all(query)` but only returns a single wrapped node.
 
@@ -186,7 +197,7 @@ mount(<div><span /></div>).one(<span />);
 
 
 
-### has(query)
+### `has(query)`
 
 Same as `all(query)` but returns true or false if the query returned results.
 
@@ -196,7 +207,7 @@ mount(<div><span /></div>).has(<span />);
 
 
 
-### wait()
+### `wait()`
 
 The `wait()` function returns a promise that waits for a shadow root to be present. Even though Bore ensures the `constructor` and `connectedCallback` are called synchronously, your component may not have a shadow root right away, for example, if it were to have an async renderer that automatically creates a shadow root. An example of this is [Skate's](https://github.com/skatejs/skatejs) renderer.
 
@@ -206,7 +217,7 @@ mount(<MyComponent />).wait().then(doSomething);
 
 
 
-### waitFor(funcReturnBool, options = { delay: 1 })
+### `waitFor(funcReturnBool, options = { delay: 1 })`
 
 Similar to `wait()`, `waitFor(callback)` will return a `Promise` that polls the `callback` at the specified `delay`. When it returns truthy, the promise resolves with the wrapper as the value.
 
