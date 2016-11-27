@@ -198,7 +198,7 @@ mount(<div><span /></div>).has(<span />);
 
 ### wait()
 
-The `wait()` function returns a primise that waits for a shadow root to be present. Even though Bore ensures the `constructor` and `connectedCallback` are called synchronously, your component may not have a shadow root right away, for example, if it were to have an async renderer that automatically creates a shadow root. An example of this is [Skate's](https://github.com/skatejs/skatejs) renderer.
+The `wait()` function returns a promise that waits for a shadow root to be present. Even though Bore ensures the `constructor` and `connectedCallback` are called synchronously, your component may not have a shadow root right away, for example, if it were to have an async renderer that automatically creates a shadow root. An example of this is [Skate's](https://github.com/skatejs/skatejs) renderer.
 
 ```js
 mount(<MyComponent />).wait().then(doSomething);
