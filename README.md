@@ -16,7 +16,7 @@ Bore makes testing the DOM simpler in the same way Enzyme makes testing React si
 
 ```js
 /* @jsx h */
-import { h, mount }
+import { h, mount } from 'bore';
 
 const wrapper = mount(<div><span /></div>);
 console.log(wrapper.one('span').node.localName);
@@ -192,4 +192,34 @@ Same as `all(query)` but returns true or false if the query returned results.
 
 ```js
 mount(<div><span /></div>).has(<span />);
+```
+
+
+
+### wait()
+
+The `wait()` function returns a primise that waits for a shadow root to be present. Even though Bore ensures the `constructor` and `connectedCallback` are called synchronously, your component may not have a shadow root right away, for example, if it were to have an async renderer that automatically creates a shadow root. An example of this is [Skate's](https://github.com/skatejs/skatejs) renderer.
+
+```js
+mount(<MyComponent />).wait().then(doSomething);
+```
+
+
+
+### waitFor(funcReturnBool, options = { delay: 1 })
+
+Similar to `wait()`, `waitFor(callback)` will return a `Promise` that polls the `callback` at the specified `delay`. When it returns truthy, the promise resolves with the wrapper as the value.
+
+```js
+mount(<MyElement />).waitFor(wrapper => wrapper.has(<div />));
+```
+
+This is very usefull when coupled with a testing framework that supports promises, such as Mocha:
+
+```js
+describe('my custom element', () => {
+  it('should have an empty div', () => {
+    return mount(<MyComponent />).waitFor(w => w.has(<div />));
+  });
+});
 ```

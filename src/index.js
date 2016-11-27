@@ -1,4 +1,4 @@
-const { DocumentFragment, Node } = window;
+const { DocumentFragment, Node, Promise } = window;
 const { slice } = [];
 
 function startsWith (key, val) {
@@ -147,6 +147,32 @@ class Wrapper {
 
   one (query) {
     return this.all(query)[0];
+  }
+
+  wait (func) {
+    return this.waitFor(wrap => !!wrap.node.shadowRoot).then(func);
+  }
+
+  waitFor (func, { delay } = { delay: 1 }) {
+    return new Promise((resolve, reject) => {
+      const check = () => {
+        const ret = (() => {
+          try {
+            return func(this);
+          } catch (e) {
+            reject(e);
+          }
+        })();
+        if (ret) {
+          resolve(this);
+        } else {
+          setTimeout(check, delay);
+        }
+      };
+      setTimeout(check, delay);
+    }).catch(e => {
+      throw e;
+    });
   }
 
   walk (node, query, callback, opts = { root: false, skip: false }) {

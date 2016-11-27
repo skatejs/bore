@@ -12,7 +12,7 @@ import '@webcomponents/shadydom';
 // eslint-disable-next-line no-unused-vars
 import { h, mount } from '../src';
 
-const { customElements, HTMLElement } = window;
+const { customElements, DocumentFragment, HTMLElement, Promise } = window;
 
 describe('bore', () => {
   it('creating elements by local name', () => {
@@ -111,9 +111,65 @@ describe('bore', () => {
         this.shadowRoot.innerHTML = '<span></span>';
       }
     }
-    customElements.define('x-test', Test);
+    customElements.define('x-test-1', Test);
     const test = mount(<Test />);
     expect(test.all('span').length).to.equal(1);
     expect(test.all('span')[0].node.localName).to.equal('span');
+  });
+});
+
+describe('then()', () => {
+  it('should be a function', () => {
+    expect(mount(<div />).wait).to.be.a('function');
+  });
+
+  it('should take no arguments', () => {
+    expect(() => mount(<div />).wait()).to.not.throw();
+  });
+
+  it('should return a Promise', () => {
+    expect(mount(<div />).wait()).to.be.an.instanceOf(Promise);
+  });
+
+  it('should wait for a shadowRoot', () => {
+    class MyElement extends HTMLElement {
+      connectedCallback () {
+        setTimeout(() => {
+          this.attachShadow({ mode: 'open' });
+        }, 100);
+      }
+    }
+    customElements.define('x-test-2', MyElement);
+    const wrapper = mount(<MyElement />);
+    return wrapper.wait(wrapperInPromise => {
+      expect(wrapperInPromise).to.equal(wrapper);
+      expect(wrapperInPromise.node.shadowRoot).to.be.an.instanceOf(DocumentFragment);
+    });
+  });
+});
+
+describe('waitFor', () => {
+  it('should be a function', () => {
+    expect(mount(<div />).waitFor).to.be.a('function');
+  });
+
+  it('should return a Promise', () => {
+    expect(mount(<div />).waitFor(() => {})).to.be.an.instanceOf(Promise);
+  });
+
+  it('should wait for a user-defined function to return true', () => {
+    class MyElement extends HTMLElement {
+      connectedCallback () {
+        setTimeout(() => {
+          this.done = true;
+        }, 100);
+      }
+    }
+    customElements.define('x-test-3', MyElement);
+    const wrapper = mount(<MyElement />);
+    return wrapper.waitFor(wrap => wrap.node.done).then(wrapperInPromise => {
+      expect(wrapperInPromise).to.equal(wrapper);
+      expect(wrapperInPromise.node.done).to.equal(true);
+    });
   });
 });
