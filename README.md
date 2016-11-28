@@ -223,7 +223,7 @@ moutn(<MyComponent />).wait(doSomething);
 
 
 
-### `waitFor(funcReturnBool, options = { delay: 1 })`
+### `waitFor(funcReturnBool[, options = { delay: 1 }])`
 
 Similar to `wait()`, `waitFor(callback)` will return a `Promise` that polls the `callback` at the specified `delay`. When it returns truthy, the promise resolves with the wrapper as the value.
 
