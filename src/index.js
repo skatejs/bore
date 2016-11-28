@@ -84,25 +84,28 @@ class Wrapper {
       fixture.appendChild(node);
       customElementDefinition && flush();
     }
+  }
 
-    // If there's no shadow root, our queries run from the host.
-    this.shadowRoot = node.shadowRoot || node;
+  get shadowRoot () {
+    const { node } = this;
+    return node.shadowRoot || node;
   }
 
   all (query) {
+    const { shadowRoot } = this;
     let temp = [];
 
     // Custom element constructors
     if (query.prototype instanceof HTMLElement) {
       this.walk(
-        this.shadowRoot,
+        shadowRoot,
         node => node instanceof query,
         node => temp.push(node)
       );
     // Custom filtering function
     } else if (typeof query === 'function') {
       this.walk(
-        this.shadowRoot,
+        shadowRoot,
         query,
         node => temp.push(node)
       );
@@ -113,7 +116,7 @@ class Wrapper {
     // chain lookup.
     } else if (query.nodeType === Node.ELEMENT_NODE) {
       this.walk(
-        this.shadowRoot,
+        shadowRoot,
         node => diff({ destination: query, source: node, root: true }).length === 0,
         node => temp.push(node)
       );
@@ -124,14 +127,14 @@ class Wrapper {
         return temp;
       }
       this.walk(
-        this.shadowRoot,
+        shadowRoot,
         node => keys.every(key => node[key] === query[key]),
         node => temp.push(node)
       );
     // Selector
     } else if (typeof query === 'string') {
       this.walk(
-        this.shadowRoot,
+        shadowRoot,
         node => matches(node, query),
         node => temp.push(node),
         { skip: true }
