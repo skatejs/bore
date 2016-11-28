@@ -218,7 +218,7 @@ mount(<MyComponent />).wait().then(doSomething);
 A slightly more concise form of the same thing could look like:
 
 ```js
-moutn(<MyComponent />).wait(doSomething);
+mount(<MyComponent />).wait(doSomething);
 ```
 
 
