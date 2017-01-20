@@ -1,5 +1,5 @@
 
-import { h, mount, WrappedNode } from 'bore';
+import { h, mount } from 'bore';
 
 declare var customElements: any;
 declare var describe: any;

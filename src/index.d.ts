@@ -2,12 +2,10 @@
 export as namespace bore;
 
 // Public API
-export function mount(htmlOrNode: JSX.Element | JSX.Element[] | string): WrappedNode
-export function h(name: string, attrsOrProps?: Object, ...children: any[]): JSX.Element | JSX.Element[]
+export function mount(htmlOrNode: JSX.Element | JSX.Element[] | string): WrappedNode;
+export function h(name: string, attrsOrProps?: Object, ...children: any[]): JSX.Element | JSX.Element[];
 
-// Private
-interface BoreNode extends HTMLElement {
-}
+
 interface WrappedNode extends Wrapper {
     node: BoreNode,
 }
@@ -22,5 +20,7 @@ interface Wrapper {
 }
 
 type Query<T> = string | JSX.Element | T | ((node: BoreNode) => boolean) | Object;
+
+interface BoreNode extends HTMLElement {}
 
 
