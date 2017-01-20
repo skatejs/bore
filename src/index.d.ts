@@ -21,6 +21,6 @@ interface Wrapper {
 
 type Query<T> = string | JSX.Element | T | ((node: BoreNode) => boolean) | Object;
 
-interface BoreNode extends HTMLElement {}
+interface BoreNode extends HTMLElement { }
 
 
