@@ -62,7 +62,8 @@ function nodeFromHtml (html) {
 
 class Wrapper {
   constructor (node, opts = {}) {
-    this.node = typeof node === 'string' ? nodeFromHtml(node) : node;
+    const isStringNode = typeof node === 'string';
+    this.node = isStringNode ? nodeFromHtml(node) : node;
     this.opts = opts;
 
     const customElementDefinition = customElements.get(this.node.localName);
@@ -81,7 +82,12 @@ class Wrapper {
 
     // Add the node to the fixture so it runs the connectedCallback().
     if (isRootNode) {
-      fixture.appendChild(node);
+      if (isStringNode) {
+          fixture.innerHTML = this.node.outerHTML;
+          this.node = fixture.firstElementChild;
+      } else {
+          fixture.appendChild(this.node);
+      }
       customElementDefinition && flush();
     }
   }
