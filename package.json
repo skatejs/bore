@@ -3,6 +3,7 @@
   "description": "Enzyme-like testing for the DOM.",
   "main": "dist/index.js",
   "jsnext:main": "src/index.js",
+  "types": "src/index.d.ts",
   "author": "Trey Shugart <treshugart@gmail.com>",
   "license": "MIT",
   "files": [
@@ -19,10 +20,13 @@
     "semantic-release": "^6.3.2",
     "skatejs-build": "^12.1.0",
     "skatejs-web-components": "^5.0.0",
-    "tape": "^4.6.2"
+    "tape": "^4.6.2",
+    "typescript": "^2.1.5",
+    "typescript-formatter": "^4.0.1"
   },
   "scripts": {
-    "test": "exit 0",
+    "test": "npm run test:ts",
+    "test:ts": "tsfmt -r && tsc -p ./",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "dependencies": {

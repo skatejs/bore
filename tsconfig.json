@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "module": "es2015",
+    "target": "es2016",
+    "lib": [
+      "dom",
+      "es2016"
+    ],
+    "baseUrl": "./",
+    "paths": {
+        "bore": ["./"]
+    },
+    "noImplicitAny": true,
+    "sourceMap": false,
+    "moduleResolution": "node",
+    "strictNullChecks": true,
+    "noEmit": true,
+    "jsx": "react",
+    "jsxFactory": "h",
+    "pretty": true
+  },
+  "include": [
+    "src/index.d.ts",
+    "test/index-tests.tsx"
+  ]
+}
