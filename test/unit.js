@@ -116,6 +116,20 @@ describe('bore', () => {
     expect(test.all('span').length).to.equal(1);
     expect(test.all('span')[0].node.localName).to.equal('span');
   });
+
+  it('mount: should descend for node as string into custom elements', () => {
+    class Test extends HTMLElement {
+      connectedCallback () {
+        this.attachShadow({ mode: 'open' });
+        this.shadowRoot.innerHTML = '<span></span>';
+      }
+    }
+    customElements.define('x-mount-test-2', Test);
+    return mount('<x-mount-test-2></x-mount-test-2>').wait((element) => {
+      expect(element.all('span').length).to.equal(1);
+      expect(element.all('span')[0].node.localName).to.equal('span');
+    });
+  });
 });
 
 describe('then()', () => {
