@@ -54,41 +54,35 @@ function matches (node, query) {
   return (node.matches || node.msMatchesSelector).call(node, query);
 }
 
-function nodeFromHtml (html) {
-  const div = document.createElement('div');
-  div.innerHTML = html;
-  return div.firstElementChild;
-}
-
 class Wrapper {
   constructor (node, opts = {}) {
-    const isStringNode = typeof node === 'string';
-    this.node = isStringNode ? nodeFromHtml(node) : node;
     this.opts = opts;
 
-    const customElementDefinition = customElements.get(this.node.localName);
+    const isStringNode = typeof node === 'string';
     const isRootNode = !node.parentNode;
-
-    // If this is a new node, clean up the fixture.
-    if (isRootNode) {
-      fixture.innerHTML = '';
-      customElementDefinition && flush();
-    }
 
     // If the fixture has been removed from the document, re-insert it.
     if (!body.contains(fixture)) {
       body.appendChild(fixture);
     }
 
+    // If this is a new node, clean up the fixture.
     // Add the node to the fixture so it runs the connectedCallback().
     if (isRootNode) {
+      fixture.innerHTML = '';
+
       if (isStringNode) {
-          fixture.innerHTML = this.node.outerHTML;
+          fixture.innerHTML = node;
           this.node = fixture.firstElementChild;
       } else {
-          fixture.appendChild(this.node);
+          fixture.appendChild(node);
+          this.node = node;
       }
+
+      const customElementDefinition = customElements.get(this.node.localName);
       customElementDefinition && flush();
+    } else {
+      this.node = node;
     }
   }
 
