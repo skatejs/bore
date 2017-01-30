@@ -5,19 +5,32 @@ function startsWith (key, val) {
   return key.indexOf(val) === 0;
 }
 
+function isAttribute (key) {
+  return key === 'attributes';
+}
+
 function shouldBeAttr (key, val) {
-  return startsWith(key, 'aria-') || startsWith(key, 'data-');
+  return startsWith(key, 'aria-') || startsWith(key, 'data-') || isAttribute(key);
 }
 
 function handleFunction (Fn) {
   return Fn.prototype instanceof HTMLElement ? new Fn() : Fn();
 }
 
+function setAttr (node, attrName, attrValue) {
+  if (isAttribute(attrName)) {
+    Object.keys(attrValue)
+        .forEach((key) => { node.setAttribute(key, attrValue[key]); });
+    return;
+  }
+  node.setAttribute(attrName, attrValue);
+}
+
 export function h (name, attrs, ...chren) {
   const node = typeof name === 'function' ? handleFunction(name) : document.createElement(name);
   Object.keys(attrs || []).forEach(attr =>
     shouldBeAttr(attr, attrs[attr])
-      ? node.setAttribute(attr, attrs[attr])
+      ? setAttr(node, attr, attrs[attr])
       : (node[attr] = attrs[attr]));
   chren.forEach(child => node.appendChild(child instanceof Node ? child : document.createTextNode(child)));
   return node;
