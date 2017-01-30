@@ -27,46 +27,44 @@ describe('bore', () => {
   });
 
   it('setting attributes on CustomElement', () => {
-
     let whoAttrReactionCount = 0;
     let deckAttrReactionCount = 0;
 
     class Test extends HTMLElement {
-      static get is() { return 'x-test-0' }
-      static get observedAttributes() { return ['who','deck'] }
+      static get is () { return 'x-test-0'; }
+      static get observedAttributes () { return ['who', 'deck']; }
 
-      set who(val) { this._who = val }
-      get who() { return this._who }
+      set who (val) { this._who = val; }
+      get who () { return this._who; }
 
-      set deck(val) { this._deck = val }
-      get deck() { return this._deck }
+      set deck (val) { this._deck = val; }
+      get deck () { return this._deck; }
 
       connectedCallback () {
         this.attachShadow({ mode: 'open' });
         this.shadowRoot.innerHTML = '<span></span>';
       }
-      attributeChangedCallback(attrName, oldVal, newVal) {
+      attributeChangedCallback (attrName, oldVal, newVal) {
         switch (attrName) {
           case Test.observedAttributes[0]:
             whoAttrReactionCount++;
-            this._setPropFromAttr(attrName,oldVal,newVal);
+            this._setPropFromAttr(attrName, oldVal, newVal);
             break;
           case Test.observedAttributes[1]:
             deckAttrReactionCount++;
-            this._setPropFromAttr(attrName,oldVal,newVal);
+            this._setPropFromAttr(attrName, oldVal, newVal);
             break;
           default:
             break;
         }
       }
-      _setPropFromAttr(attrName,oldVal,newVal){
+      _setPropFromAttr (attrName, oldVal, newVal) {
         oldVal !== newVal && (this[attrName] = newVal);
       }
     }
-    customElements.define(Test.is,Test)
+    customElements.define(Test.is, Test);
 
-
-    const myGreeter = <x-test-0 deck="birdhouse" attributes={{who:'Tony Hawk'}}></x-test-0>;
+    const myGreeter = <x-test-0 deck='birdhouse' attributes={{who: 'Tony Hawk'}} />;
 
     expect(myGreeter.hasAttribute('who')).to.equal(true);
     expect(myGreeter.getAttribute('who')).to.equal('Tony Hawk');
@@ -74,15 +72,14 @@ describe('bore', () => {
     expect(myGreeter.hasAttribute('deck')).to.equal(false);
     expect(myGreeter.getAttribute('deck')).to.equal(null);
 
-    return mount(myGreeter).wait((element)=>{
+    return mount(myGreeter).wait((element) => {
       expect(element.node.who).to.equal('Tony Hawk');
       // by default h sets to props
       expect(element.node.deck).to.equal('birdhouse');
       expect(whoAttrReactionCount > 0).to.equal(true);
       expect(deckAttrReactionCount).to.equal(0);
     });
-
-  })
+  });
 
   it('setting attributes on Native HTMLElement', () => {
     const div = <div
