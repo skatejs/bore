@@ -67,22 +67,22 @@ class Wrapper {
     }
 
     // If this is a new node, clean up the fixture.
-    // Add the node to the fixture so it runs the connectedCallback().
     if (isRootNode) {
       fixture.innerHTML = '';
 
+      // Add the node to the fixture so it runs the connectedCallback().
       if (isStringNode) {
-          fixture.innerHTML = node;
-          this.node = fixture.firstElementChild;
+        fixture.innerHTML = node;
       } else {
-          fixture.appendChild(node);
-          this.node = node;
+        fixture.appendChild(node);
       }
+    }
 
+    this.node = isStringNode ? fixture.firstElementChild : node;
+
+    if (isRootNode) {
       const customElementDefinition = customElements.get(this.node.localName);
       customElementDefinition && flush();
-    } else {
-      this.node = node;
     }
   }
 
