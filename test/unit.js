@@ -12,7 +12,7 @@ import '@webcomponents/shadydom';
 // eslint-disable-next-line no-unused-vars
 import { h, mount } from '../src';
 
-const { customElements, DocumentFragment, HTMLElement, Promise } = window;
+const { customElements, DocumentFragment, HTMLElement, Promise, Event, CustomEvent } = window;
 
 describe('bore', () => {
   it('creating elements by local name', () => {
@@ -58,6 +58,25 @@ describe('bore', () => {
     expect(div.who).to.equal(undefined);
     expect(div.deck).to.equal(undefined);
     expect(div.rating).to.equal(undefined);
+  });
+
+  it('setting events', () => {
+    const click = (e) => { e.target.clickTriggered = true; };
+    const custom = (e) => { e.target.customTriggered = true; };
+
+    const dom = <div events={{click, custom}} />;
+
+    dom.dispatchEvent(new Event('click'));
+    dom.dispatchEvent(new CustomEvent('custom'));
+
+    expect(dom.onclick).to.equal(null);
+    expect(dom.click).to.not.equal(undefined);
+    expect(dom.getAttribute('click')).to.equal(null);
+    expect(dom.clickTriggered).to.equal(true);
+
+    expect(dom.custom).to.equal(undefined);
+    expect(dom.getAttribute('custom')).to.equal(null);
+    expect(dom.customTriggered).to.equal(true);
   });
 
   it('mount: all(string)', () => {

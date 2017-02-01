@@ -4,25 +4,53 @@ const { slice } = [];
 function isAttribute (key) {
   return key === 'attrs';
 }
+function isEvent (key) {
+  return key === 'events';
+}
 
 function handleFunction (Fn) {
   return Fn.prototype instanceof HTMLElement ? new Fn() : Fn();
 }
 
-function setAttrs (node, attrName, attrValue) {
+function setAttrs (node, attrValue) {
   Object.keys(attrValue)
       .forEach((key) => { node.setAttribute(key, attrValue[key]); });
+}
+function setEvents (node, attrValue) {
+  Object.keys(attrValue)
+      .forEach((key) => { node.addEventListener(key, attrValue[key]); });
+}
+function setProps (node, attrName, attrValue) {
+  node[attrName] = attrValue;
+}
+
+function setupNodeAttrs (node, attrs) {
+  Object.keys(attrs || {})
+    .forEach(attrName => {
+      const attrValue = attrs[attrName];
+
+      if (isAttribute(attrName)) {
+        setAttrs(node, attrValue);
+        return;
+      }
+
+      if (isEvent(attrName)) {
+        setEvents(node, attrValue);
+        return;
+      }
+
+      setProps(node, attrName, attrValue);
+    });
+}
+
+function setupNodeChildren (node, children) {
+  children.forEach(child => node.appendChild(child instanceof Node ? child : document.createTextNode(child)));
 }
 
 export function h (name, attrs, ...chren) {
   const node = typeof name === 'function' ? handleFunction(name) : document.createElement(name);
-  Object.keys(attrs || {})
-    .forEach(attrName => {
-      isAttribute(attrName)
-        ? setAttrs(node, attrName, attrs[attrName])
-        : (node[attrName] = attrs[attrName]);
-    });
-  chren.forEach(child => node.appendChild(child instanceof Node ? child : document.createTextNode(child)));
+  setupNodeAttrs(node, attrs);
+  setupNodeChildren(node, chren);
   return node;
 }
 
