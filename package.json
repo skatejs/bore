@@ -25,7 +25,7 @@
     "typescript-formatter": "^4.0.1"
   },
   "scripts": {
-    "test": "npm run test:ts && sk-tests",
+    "test": "npm run test:ts",
     "test:ts": "tsfmt -r && tsc -p ./",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
