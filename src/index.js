@@ -63,22 +63,24 @@ function getInstantiatedNodeWithinFixture(node, isRootNode) {
   }
 
   if (isRootNode) {
-    setFixtureContent();
+    setFixtureContent( node );
   }
 
   return isStringNode
     ? fixture.firstElementChild
     : node;
+}
 
-  function setFixtureContent() {
+function setFixtureContent( node ) {
+    const isStringNode = typeof node === 'string';
+
     // If this is a new node, clean up the fixture.
     fixture.innerHTML = '';
 
     // Add the node to the fixture so it runs the connectedCallback().
-    return isStringNode
-      ? (fixture.innerHTML = node)
-      : (fixture.appendChild(node));
-  }
+    isStringNode
+        ? (fixture.innerHTML = node)
+        : (fixture.appendChild(node));
 }
 
 class Wrapper {
