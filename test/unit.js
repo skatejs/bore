@@ -26,76 +26,38 @@ describe('bore', () => {
     expect(<Fn />.localName).to.equal('div');
   });
 
-  it('setting attributes on CustomElement', () => {
-    let whoAttrReactionCount = 0;
-    let deckAttrReactionCount = 0;
-
-    class Test extends HTMLElement {
-      static get is () { return 'x-test-0'; }
-      static get observedAttributes () { return ['who', 'deck']; }
-
-      set who (val) { this._who = val; }
-      get who () { return this._who; }
-
-      set deck (val) { this._deck = val; }
-      get deck () { return this._deck; }
-
-      connectedCallback () {
-        this.attachShadow({ mode: 'open' });
-        this.shadowRoot.innerHTML = '<span></span>';
-      }
-      attributeChangedCallback (attrName, oldVal, newVal) {
-        switch (attrName) {
-          case Test.observedAttributes[0]:
-            whoAttrReactionCount++;
-            this._setPropFromAttr(attrName, oldVal, newVal);
-            break;
-          case Test.observedAttributes[1]:
-            deckAttrReactionCount++;
-            this._setPropFromAttr(attrName, oldVal, newVal);
-            break;
-          default:
-            break;
-        }
-      }
-      _setPropFromAttr (attrName, oldVal, newVal) {
-        oldVal !== newVal && (this[attrName] = newVal);
-      }
-    }
-    customElements.define(Test.is, Test);
-
-    const myGreeter = <x-test-0 deck='birdhouse' attributes={{who: 'Tony Hawk'}} />;
-
-    expect(myGreeter.hasAttribute('who')).to.equal(true);
-    expect(myGreeter.getAttribute('who')).to.equal('Tony Hawk');
-
-    expect(myGreeter.hasAttribute('deck')).to.equal(false);
-    expect(myGreeter.getAttribute('deck')).to.equal(null);
-
-    return mount(myGreeter).wait((element) => {
-      expect(element.node.who).to.equal('Tony Hawk');
-      // by default h sets to props
-      expect(element.node.deck).to.equal('birdhouse');
-      expect(whoAttrReactionCount > 0).to.equal(true);
-      expect(deckAttrReactionCount).to.equal(0);
-    });
-  });
-
-  it('setting attributes on Native HTMLElement', () => {
+  it('setting attributes', () => {
     const div = <div
       aria-test='aria something'
       data-test='data something'
       test1='test something'
       test2={1}
+      attrs={{
+        'aria-who': 'Tony Hawk',
+        who: 'Tony Hawk',
+        deck: 'birdhouse',
+        rating: 10
+      }}
     />;
-    expect(div.getAttribute('aria-test')).to.equal('aria something');
-    expect(div.getAttribute('data-test')).to.equal('data something');
+    expect(div.hasAttribute('aria-test')).to.equal(false);
+    expect(div.hasAttribute('data-test')).to.equal(false);
     expect(div.hasAttribute('test1')).to.equal(false);
     expect(div.hasAttribute('test2')).to.equal(false);
-    expect(div['aria-test']).to.equal(undefined);
-    expect(div['data-test']).to.equal(undefined);
+
+    expect(div.hasAttribute('aria-who')).to.equal(true);
+    expect(div.hasAttribute('who')).to.equal(true);
+    expect(div.hasAttribute('deck')).to.equal(true);
+    expect(div.hasAttribute('rating')).to.equal(true);
+
+    expect(div['aria-test']).to.equal('aria something');
+    expect(div['data-test']).to.equal('data something');
     expect(div.test1).to.equal('test something');
     expect(div.test2).to.equal(1);
+
+    expect(div['aria-who']).to.equal(undefined);
+    expect(div.who).to.equal(undefined);
+    expect(div.deck).to.equal(undefined);
+    expect(div.rating).to.equal(undefined);
   });
 
   it('mount: all(string)', () => {

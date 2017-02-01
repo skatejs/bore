@@ -1,37 +1,27 @@
 const { DocumentFragment, Node, Promise } = window;
 const { slice } = [];
 
-function startsWith (key, val) {
-  return key.indexOf(val) === 0;
-}
-
 function isAttribute (key) {
-  return key === 'attributes';
-}
-
-function shouldBeAttr (key, val) {
-  return startsWith(key, 'aria-') || startsWith(key, 'data-') || isAttribute(key);
+  return key === 'attrs';
 }
 
 function handleFunction (Fn) {
   return Fn.prototype instanceof HTMLElement ? new Fn() : Fn();
 }
 
-function setAttr (node, attrName, attrValue) {
-  if (isAttribute(attrName)) {
-    Object.keys(attrValue)
-        .forEach((key) => { node.setAttribute(key, attrValue[key]); });
-    return;
-  }
-  node.setAttribute(attrName, attrValue);
+function setAttrs (node, attrName, attrValue) {
+  Object.keys(attrValue)
+      .forEach((key) => { node.setAttribute(key, attrValue[key]); });
 }
 
 export function h (name, attrs, ...chren) {
   const node = typeof name === 'function' ? handleFunction(name) : document.createElement(name);
-  Object.keys(attrs || []).forEach(attr =>
-    shouldBeAttr(attr, attrs[attr])
-      ? setAttr(node, attr, attrs[attr])
-      : (node[attr] = attrs[attr]));
+  Object.keys(attrs || {})
+    .forEach(attrName => {
+      isAttribute(attrName)
+        ? setAttrs(node, attrName, attrs[attrName])
+        : (node[attrName] = attrs[attrName]);
+    });
   chren.forEach(child => node.appendChild(child instanceof Node ? child : document.createTextNode(child)));
   return node;
 }
