@@ -63,7 +63,7 @@ function getInstantiatedNodeWithinFixture(node, isRootNode) {
   }
 
   if (isRootNode) {
-    setFixtureContent( node );
+    setFixtureContent( node, isStringNode );
   }
 
   return isStringNode
@@ -71,14 +71,12 @@ function getInstantiatedNodeWithinFixture(node, isRootNode) {
     : node;
 }
 
-function setFixtureContent( node ) {
-    const isStringNode = typeof node === 'string';
-
+function setFixtureContent( node, shouldSetChildrenViaString ) {
     // If this is a new node, clean up the fixture.
     fixture.innerHTML = '';
 
     // Add the node to the fixture so it runs the connectedCallback().
-    isStringNode
+    shouldSetChildrenViaString
         ? (fixture.innerHTML = node)
         : (fixture.appendChild(node));
 }
