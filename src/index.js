@@ -54,7 +54,7 @@ function matches (node, query) {
   return (node.matches || node.msMatchesSelector).call(node, query);
 }
 
-function getInstantiatedNodeWithinFixture(node, isRootNode) {
+function getInstantiatedNodeWithinFixture (node, isRootNode) {
   const isStringNode = typeof node === 'string';
 
   // If the fixture has been removed from the document, re-insert it.
@@ -63,7 +63,7 @@ function getInstantiatedNodeWithinFixture(node, isRootNode) {
   }
 
   if (isRootNode) {
-    setFixtureContent( node, isStringNode );
+    setFixtureContent(node, isStringNode);
   }
 
   return isStringNode
@@ -71,14 +71,14 @@ function getInstantiatedNodeWithinFixture(node, isRootNode) {
     : node;
 }
 
-function setFixtureContent( node, shouldSetChildrenViaString ) {
-    // If this is a new node, clean up the fixture.
-    fixture.innerHTML = '';
+function setFixtureContent (node, shouldSetChildrenViaString) {
+  // If this is a new node, clean up the fixture.
+  fixture.innerHTML = '';
 
-    // Add the node to the fixture so it runs the connectedCallback().
-    shouldSetChildrenViaString
-        ? (fixture.innerHTML = node)
-        : (fixture.appendChild(node));
+  // Add the node to the fixture so it runs the connectedCallback().
+  shouldSetChildrenViaString
+    ? (fixture.innerHTML = node)
+    : (fixture.appendChild(node));
 }
 
 class Wrapper {
