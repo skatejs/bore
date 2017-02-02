@@ -12,7 +12,7 @@ import '@webcomponents/shadydom';
 // eslint-disable-next-line no-unused-vars
 import { h, mount } from '../src';
 
-const { customElements, DocumentFragment, HTMLElement, Promise } = window;
+const { customElements, DocumentFragment, HTMLElement, Promise, Event, CustomEvent } = window;
 
 describe('bore', () => {
   it('creating elements by local name', () => {
@@ -32,15 +32,51 @@ describe('bore', () => {
       data-test='data something'
       test1='test something'
       test2={1}
+      attrs={{
+        'aria-who': 'Tony Hawk',
+        who: 'Tony Hawk',
+        deck: 'birdhouse',
+        rating: 10
+      }}
     />;
-    expect(div.getAttribute('aria-test')).to.equal('aria something');
-    expect(div.getAttribute('data-test')).to.equal('data something');
+    expect(div.hasAttribute('aria-test')).to.equal(false);
+    expect(div.hasAttribute('data-test')).to.equal(false);
     expect(div.hasAttribute('test1')).to.equal(false);
     expect(div.hasAttribute('test2')).to.equal(false);
-    expect(div['aria-test']).to.equal(undefined);
-    expect(div['data-test']).to.equal(undefined);
+
+    expect(div.hasAttribute('aria-who')).to.equal(true);
+    expect(div.hasAttribute('who')).to.equal(true);
+    expect(div.hasAttribute('deck')).to.equal(true);
+    expect(div.hasAttribute('rating')).to.equal(true);
+
+    expect(div['aria-test']).to.equal('aria something');
+    expect(div['data-test']).to.equal('data something');
     expect(div.test1).to.equal('test something');
     expect(div.test2).to.equal(1);
+
+    expect(div['aria-who']).to.equal(undefined);
+    expect(div.who).to.equal(undefined);
+    expect(div.deck).to.equal(undefined);
+    expect(div.rating).to.equal(undefined);
+  });
+
+  it('setting events', () => {
+    const click = (e) => { e.target.clickTriggered = true; };
+    const custom = (e) => { e.target.customTriggered = true; };
+
+    const dom = <div events={{click, custom}} />;
+
+    dom.dispatchEvent(new Event('click'));
+    dom.dispatchEvent(new CustomEvent('custom'));
+
+    expect(dom.onclick).to.equal(null);
+    expect(dom.click).to.not.equal(undefined);
+    expect(dom.getAttribute('click')).to.equal(null);
+    expect(dom.clickTriggered).to.equal(true);
+
+    expect(dom.custom).to.equal(undefined);
+    expect(dom.getAttribute('custom')).to.equal(null);
+    expect(dom.customTriggered).to.equal(true);
   });
 
   it('mount: all(string)', () => {

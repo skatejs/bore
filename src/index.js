@@ -1,25 +1,59 @@
 const { DocumentFragment, Node, Promise } = window;
 const { slice } = [];
 
-function startsWith (key, val) {
-  return key.indexOf(val) === 0;
+function isAttr (key) {
+  return key === 'attrs';
 }
 
-function shouldBeAttr (key, val) {
-  return startsWith(key, 'aria-') || startsWith(key, 'data-');
+function isEvent (key) {
+  return key === 'events';
 }
 
 function handleFunction (Fn) {
   return Fn.prototype instanceof HTMLElement ? new Fn() : Fn();
 }
 
+function setAttrs (node, attrs) {
+  Object.keys(attrs)
+    .forEach(key => node.setAttribute(key, attrs[key]));
+}
+
+function setEvents (node, events) {
+  Object.keys(events)
+    .forEach(key => node.addEventListener(key, events[key]));
+}
+
+function setProp (node, attrName, attrValue) {
+  node[attrName] = attrValue;
+}
+
+function setupNodeAttrs (node, attrs) {
+  Object.keys(attrs || {})
+    .forEach(attrName => {
+      const attrValue = attrs[attrName];
+
+      if (isAttr(attrName)) {
+        setAttrs(node, attrValue);
+        return;
+      }
+
+      if (isEvent(attrName)) {
+        setEvents(node, attrValue);
+        return;
+      }
+
+      setProp(node, attrName, attrValue);
+    });
+}
+
+function setupNodeChildren (node, children) {
+  children.forEach(child => node.appendChild(child instanceof Node ? child : document.createTextNode(child)));
+}
+
 export function h (name, attrs, ...chren) {
   const node = typeof name === 'function' ? handleFunction(name) : document.createElement(name);
-  Object.keys(attrs || []).forEach(attr =>
-    shouldBeAttr(attr, attrs[attr])
-      ? node.setAttribute(attr, attrs[attr])
-      : (node[attr] = attrs[attr]));
-  chren.forEach(child => node.appendChild(child instanceof Node ? child : document.createTextNode(child)));
+  setupNodeAttrs(node, attrs);
+  setupNodeChildren(node, chren);
   return node;
 }
 
