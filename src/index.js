@@ -1,9 +1,10 @@
 const { DocumentFragment, Node, Promise } = window;
 const { slice } = [];
 
-function isAttribute (key) {
+function isAttr (key) {
   return key === 'attrs';
 }
+
 function isEvent (key) {
   return key === 'events';
 }
@@ -12,15 +13,17 @@ function handleFunction (Fn) {
   return Fn.prototype instanceof HTMLElement ? new Fn() : Fn();
 }
 
-function setAttrs (node, attrValue) {
-  Object.keys(attrValue)
-      .forEach((key) => { node.setAttribute(key, attrValue[key]); });
+function setAttrs (node, attrs) {
+  Object.keys(attrs)
+    .forEach(key => node.setAttribute(key, attrs[key]));
 }
-function setEvents (node, attrValue) {
-  Object.keys(attrValue)
-      .forEach((key) => { node.addEventListener(key, attrValue[key]); });
+
+function setEvents (node, events) {
+  Object.keys(events)
+    .forEach(key => node.addEventListener(key, events[key]));
 }
-function setProps (node, attrName, attrValue) {
+
+function setProp (node, attrName, attrValue) {
   node[attrName] = attrValue;
 }
 
@@ -29,7 +32,7 @@ function setupNodeAttrs (node, attrs) {
     .forEach(attrName => {
       const attrValue = attrs[attrName];
 
-      if (isAttribute(attrName)) {
+      if (isAttr(attrName)) {
         setAttrs(node, attrValue);
         return;
       }
@@ -39,7 +42,7 @@ function setupNodeAttrs (node, attrs) {
         return;
       }
 
-      setProps(node, attrName, attrValue);
+      setProp(node, attrName, attrValue);
     });
 }
 
