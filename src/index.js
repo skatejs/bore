@@ -88,34 +88,42 @@ function matches (node, query) {
   return (node.matches || node.msMatchesSelector).call(node, query);
 }
 
-function nodeFromHtml (html) {
-  const div = document.createElement('div');
-  div.innerHTML = html;
-  return div.firstElementChild;
+function getInstantiatedNodeWithinFixture (node, isRootNode) {
+  const isStringNode = typeof node === 'string';
+
+  // If the fixture has been removed from the document, re-insert it.
+  if (!body.contains(fixture)) {
+    body.appendChild(fixture);
+  }
+
+  if (isRootNode) {
+    setFixtureContent(node, isStringNode);
+  }
+
+  return isStringNode
+    ? fixture.firstElementChild
+    : node;
+}
+
+function setFixtureContent (node, shouldSetChildrenViaString) {
+  // If this is a new node, clean up the fixture.
+  fixture.innerHTML = '';
+
+  // Add the node to the fixture so it runs the connectedCallback().
+  shouldSetChildrenViaString
+    ? (fixture.innerHTML = node)
+    : (fixture.appendChild(node));
 }
 
 class Wrapper {
   constructor (node, opts = {}) {
-    this.node = typeof node === 'string' ? nodeFromHtml(node) : node;
-    this.opts = opts;
-
-    const customElementDefinition = customElements.get(this.node.localName);
     const isRootNode = !node.parentNode;
 
-    // If this is a new node, clean up the fixture.
-    if (isRootNode) {
-      fixture.innerHTML = '';
-      customElementDefinition && flush();
-    }
+    this.opts = opts;
+    this.node = getInstantiatedNodeWithinFixture(node, isRootNode);
 
-    // If the fixture has been removed from the document, re-insert it.
-    if (!body.contains(fixture)) {
-      body.appendChild(fixture);
-    }
-
-    // Add the node to the fixture so it runs the connectedCallback().
     if (isRootNode) {
-      fixture.appendChild(node);
+      const customElementDefinition = customElements.get(this.node.localName);
       customElementDefinition && flush();
     }
   }
