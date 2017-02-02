@@ -32,7 +32,7 @@ Since web components are an extension of the HTML standard, Bore inherently work
 1. The custom element polyfill is supported by calling `flush()` after mounting the nodes so things appear synchronous.
 2. Nodes are mounted to a fixture that is always kept in the DOM (even if it's removed, it will put itself back). This is so that custom elements can go through their natural lifecycle.
 3. The fixture is cleaned up on every mount, so there's no need to cleanup after your last mount.
-4. The `attachShadow()` method is overridden to *always* provide an `open` shadow root so that there is always a `shadowRoot` property and it can be queried against. 
+4. The `attachShadow()` method is overridden to *always* provide an `open` shadow root so that there is always a `shadowRoot` property and it can be queried against.
 
 
 
@@ -71,15 +71,37 @@ This can probably be confusing to some, so this is only recommended as a last re
 
 
 
-#### Setting attributes vs properties
+#### Setting attributes vs properties vs events
 
-The `h` function prefers props unless it's something that *must* be set as an attribute, such as `aria-` or `data-`. As a best practice, your web component should be designed to prefer props and reflect to attributes only when it makes sense.
+The `h` function sets always props. If you wanna set something as an attribute, such as `aria-` or `data-` or anything else `h` accepts special `attrs` prop.
+For setting event handlers use `events` property.
+
+> As a best practice, your web component should be designed to prefer props and reflect to attributes only when it makes sense.
+
+*Example:*
+
+```js
+/* @jsx h */
+import { h } from 'bore';
+
+const dom = <my-skate
+  brand="zero" // this will always set to element property
+  attrs={{     // this will always set to element attributes
+    'arial-label':'skate',
+    mastery: 'half-pipe'
+  }}
+  events={{   // this will set event handlers on element
+    click: e => console.log('just regular click'),
+    kickflip: e => console.log('just did kickflip')
+  }}
+></my-skate>
+```
 
 
 
 ### `mount(htmlOrNode)`
 
-The mount function takes a node, or a string - and converts it to a node - and returns a wrapper around it. 
+The mount function takes a node, or a string - and converts it to a node - and returns a wrapper around it.
 
 ```js
 import { mount, h } from 'bore';
