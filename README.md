@@ -3,7 +3,7 @@
 [Enzyme](https://github.com/airbnb/enzyme)-like testing utility built for the DOM and Web Components, that works both on the server and in browsers.
 
 ```sh
-npm install bore --save-dev
+npm install @skatejs/bore --save-dev
 ```
 
 
