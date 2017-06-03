@@ -1,36 +1,23 @@
 {
-  "name": "bore",
+  "name": "@skatejs/bore",
   "description": "Enzyme-like testing for the DOM.",
-  "main": "dist/index.js",
-  "jsnext:main": "src/index.js",
-  "types": "src/index.d.ts",
+  "main": "umd/@skatejs/bore.js",
   "author": "Trey Shugart <treshugart@gmail.com>",
   "license": "MIT",
-  "files": [
-    "dist",
-    "src"
-  ],
-  "devDependencies": {
-    "babel-preset-es2015": "^6.18.0",
-    "babel-preset-react": "^6.16.0",
-    "babel-register": "^6.18.0",
-    "cz-conventional-changelog": "^1.2.0",
-    "jsdom": "^9.8.3",
-    "jsdom-global": "^2.1.0",
-    "semantic-release": "^6.3.2",
-    "skatejs-build": "^12.1.0",
-    "skatejs-web-components": "^5.0.0",
-    "tape": "^4.6.2",
-    "typescript": "^2.1.5",
-    "typescript-formatter": "^4.0.1"
-  },
+  "files": ["umd"],
   "scripts": {
-    "test": "npm run test:ts",
-    "test:ts": "tsfmt -r && tsc -p ./",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+    "prepublish": "nwb build",
+    "test": "jest"
   },
   "dependencies": {
     "skatejs-dom-diff": "^0.4.2"
+  },
+  "devDependencies": {
+    "cz-conventional-changelog": "^1.2.0",
+    "jest": "^20.0.4",
+    "nwb": "^0.16.3",
+    "semantic-release": "^6.3.2",
+    "webpack-node-externals": "^1.6.0"
   },
   "config": {
     "commitizen": {
@@ -40,5 +27,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/skatejs/bore.git"
+  },
+  "babel": {
+    "presets": ["react"]
   }
 }
