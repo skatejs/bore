@@ -1,5 +1,1 @@
 language: node_js
-after_success:
-  - semantic-release pre
-  - npm publish
-  - semantic-release post
