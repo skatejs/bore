@@ -1,7 +1,8 @@
 /** @jsx h */
 /* eslint-env jest */
 
-const { h, mount } = require('../src');
+const { mount } = require('../src');
+const { h } = require('@skatejs/val');
 const { customElements, DocumentFragment, HTMLElement, Promise, Event, CustomEvent } = window;
 const hasCustomElements = 'customElements' in window;
 const hasQuerySelector = 'querySelector' in Element.prototype;
@@ -11,64 +12,6 @@ function empty (value) {
 }
 
 describe('bore', () => {
-  it('creating elements by local name', () => {
-    expect(<input />.nodeName).toEqual('INPUT');
-    expect(<test />.nodeName).toEqual('TEST');
-    expect(<custom-element />.nodeName).toEqual('CUSTOM-ELEMENT');
-  });
-
-  it('creating elements by function', () => {
-    const Fn = () => <div />;
-    expect(<Fn />.nodeName).toEqual('DIV');
-  });
-
-  it('setting attributes', () => {
-    const div = <div
-      aria-test='aria something'
-      data-test='data something'
-      test1='test something'
-      test2={1}
-      attrs={{
-        'aria-who': 'Tony Hawk',
-        who: 'Tony Hawk',
-        deck: 'birdhouse',
-        rating: 10
-      }}
-    />;
-    expect(div.hasAttribute('aria-test')).toEqual(false);
-    expect(div.hasAttribute('data-test')).toEqual(false);
-    expect(div.hasAttribute('test1')).toEqual(false);
-    expect(div.hasAttribute('test2')).toEqual(false);
-
-    expect(div.hasAttribute('aria-who')).toEqual(true);
-    expect(div.hasAttribute('who')).toEqual(true);
-    expect(div.hasAttribute('deck')).toEqual(true);
-    expect(div.hasAttribute('rating')).toEqual(true);
-
-    expect(div['aria-test']).toEqual('aria something');
-    expect(div['data-test']).toEqual('data something');
-    expect(div.test1).toEqual('test something');
-    expect(div.test2).toEqual(1);
-
-    empty(div['aria-who']);
-    empty(div.who);
-    empty(div.deck);
-    empty(div.rating);
-  });
-
-  it('setting events', () => {
-    const click = (e) => { e.target.clickTriggered = true; };
-    const custom = (e) => { e.target.customTriggered = true; };
-
-    const dom = mount(<div events={{click, custom}} />).node;
-
-    dom.dispatchEvent(new Event('click'));
-    dom.dispatchEvent(new CustomEvent('custom'));
-
-    expect(dom.clickTriggered).toEqual(true);
-    expect(dom.customTriggered).toEqual(true);
-  });
-
   // This isn't implemented in some server-side DOM environments.
   hasQuerySelector && it('mount: all(string)', () => {
     const div = mount(
