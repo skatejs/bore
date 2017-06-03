@@ -14,12 +14,17 @@ Bore makes testing the DOM simpler in the same way Enzyme makes testing React si
 
 ```js
 /* @jsx h */
-import { h, mount } from 'bore';
+
+import { mount } from '@skatejs/bore';
+import { h } from '@skatejs/val';
 
 const wrapper = mount(<div><span /></div>);
-console.log(wrapper.one('span').node.localName);
+
 // "span"
+console.log(wrapper.one('span').node.localName);
 ```
+
+***You don't have to use [@skatejs/val](https://github.com/skatejs/val) but it makes creating DOM a lot easier than using the native imperative APIs.***
 
 
 
@@ -49,67 +54,15 @@ There's no distinction between shallow rendering and full rendering as there's n
 
 
 
-### `h(name, attrsOrProps, ...children)`
-
-Bore ships with a simple JSX to DOM function that you can use as your JSX pragma, if that's your sort of thing.
-
-```js
-/* @jsx h */
-import { h } from 'bore';
-
-console.log(<div />.localName);
-// "div"
-```
-
-If you don't want to configure the pragma and you want to just leave it as React, you can do the following:
-
-```js
-import { h } from 'bore';
-
-const React = { createElement: h };
-
-console.log(<div />.localName);
-// "div"
-```
-
-This can probably be confusing to some, so this is only recommended as a last resort.
-
-
-
-#### Setting attributes vs properties vs events
-
-The `h` function sets always props. If you wanna set something as an attribute, such as `aria-` or `data-` or anything else `h` accepts special `attrs` prop.
-For setting event handlers use `events` property.
-
-> As a best practice, your web component should be designed to prefer props and reflect to attributes only when it makes sense.
-
-*Example:*
-
-```js
-/* @jsx h */
-import { h } from 'bore';
-
-const dom = <my-skate
-  brand="zero" // this will always set to element property
-  attrs={{     // this will always set to element attributes
-    'arial-label':'skate',
-    mastery: 'half-pipe'
-  }}
-  events={{   // this will set event handlers on element
-    click: e => console.log('just regular click'),
-    kickflip: e => console.log('just did kickflip')
-  }}
-></my-skate>
-```
-
-
-
 ### `mount(htmlOrNode)`
 
 The mount function takes a node, or a string - and converts it to a node - and returns a wrapper around it.
 
 ```js
-import { mount, h } from 'bore';
+/** @jsx h */
+
+import { mount } from '@skatejs/bore';
+import { h } from '@skatejs/val';
 
 mount(<div><span /></div>);
 ```
