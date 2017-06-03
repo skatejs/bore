@@ -4,7 +4,9 @@
   "main": "umd/@skatejs/bore.js",
   "author": "Trey Shugart <treshugart@gmail.com>",
   "license": "MIT",
-  "files": ["umd"],
+  "files": [
+    "umd"
+  ],
   "scripts": {
     "prepublish": "nwb build",
     "test": "jest"
@@ -24,6 +26,9 @@
     "url": "https://github.com/skatejs/bore.git"
   },
   "babel": {
-    "presets": ["react"]
-  }
+    "presets": [
+      "react"
+    ]
+  },
+  "version": "3.0.0"
 }
