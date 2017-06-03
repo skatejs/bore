@@ -1,8 +1,6 @@
 # bore
 
-*Work in progress.*
-
-[Enzyme](https://github.com/airbnb/enzyme)-like testing utility built for the DOM and Web Components.
+[Enzyme](https://github.com/airbnb/enzyme)-like testing utility built for the DOM and Web Components, that works both on the server and in browsers.
 
 ```sh
 npm install bore --save-dev
@@ -36,11 +34,18 @@ Since web components are an extension of the HTML standard, Bore inherently work
 
 
 
+## Testing with Jest / JSDOM / Node
+
+Currently JSDOM doesn't have web component support, so you're limited to testing non-web-component DOM in JSDOM, or Jest out of the box.
+
+To test your web components in Node or Jest, you'll have to use [`@skatejs/ssr`](https://github.com/skatejs/ssr#testing-in-node). Instructions are there.
+
+
 
 
 ## API
 
-Since Shadow DOM hides implementation details, it negates having to provide a way to do shallow rendering. Therefore, we only need to provide a simple way to wrap a component.
+There's no distinction between shallow rendering and full rendering as there's no significant performance implications and Shadow DOM negates the need for the distinction.
 
 
 
