@@ -50,14 +50,14 @@ function setupNodeChildren (node, children) {
   children.forEach(child => node.appendChild(child instanceof Node ? child : document.createTextNode(child)));
 }
 
-export function h (name, attrs, ...chren) {
+function h (name, attrs, ...chren) {
   const node = typeof name === 'function' ? handleFunction(name) : document.createElement(name);
   setupNodeAttrs(node, attrs);
   setupNodeChildren(node, chren);
   return node;
 }
 
-const { customElements, HTMLElement, NodeFilter } = window;
+const { customElements, HTMLElement } = window;
 const { body } = document;
 const { attachShadow } = HTMLElement.prototype;
 const { diff } = require('skatejs-dom-diff').default;
@@ -83,9 +83,26 @@ function flush () {
   }
 }
 
-// Abstraction for browsers not following the spec.
+// Abstraction for:
+//
+// 1. Native
+// 2. Non-compliant browers
+// 3. JSDOM or environments that only implement querySelector
 function matches (node, query) {
-  return (node.matches || node.msMatchesSelector).call(node, query);
+  return (
+    node.matches = 
+    node.matchesSelector || 
+    node.mozMatchesSelector ||
+    node.msMatchesSelector || 
+    node.oMatchesSelector || 
+    node.webkitMatchesSelector ||
+    function(s) {
+      const matches = (this.document || this.ownerDocument).querySelectorAll(s);
+      let i = matches.length;
+      while (--i >= 0 && matches.item(i) !== this) {}
+      return i > -1;            
+    }
+  ).call(node, query);
 }
 
 function nodeFromHtml (html) {
@@ -99,7 +116,7 @@ class Wrapper {
     this.node = typeof node === 'string' ? nodeFromHtml(node) : node;
     this.opts = opts;
 
-    const customElementDefinition = customElements.get(this.node.localName);
+    const customElementDefinition = customElements && customElements.get(this.node.localName);
     const isRootNode = !node.parentNode;
 
     // If this is a new node, clean up the fixture.
@@ -127,52 +144,27 @@ class Wrapper {
 
   all (query) {
     const { shadowRoot } = this;
+    const type = typeof query;
     let temp = [];
 
-    // Custom element constructors
-    if (query.prototype instanceof HTMLElement) {
-      this.walk(
-        shadowRoot,
-        node => node instanceof query,
-        node => temp.push(node)
-      );
-    // Custom filtering function
-    } else if (typeof query === 'function') {
-      this.walk(
-        shadowRoot,
-        query,
-        node => temp.push(node)
-      );
-    // Diffing node trees
-    //
-    // We have to check if the node type is an element rather than checking
-    // instanceof because the ShadyDOM polyfill seems to fail the prototype
-    // chain lookup.
-    } else if (query.nodeType === Node.ELEMENT_NODE) {
-      this.walk(
-        shadowRoot,
-        node => diff({ destination: query, source: node, root: true }).length === 0,
-        node => temp.push(node)
-      );
-    // Using an object as criteria
-    } else if (typeof query === 'object') {
+    if (query.nodeType === Node.ELEMENT_NODE) {
+      walkTree(shadowRoot, node => diff({ destination: query, source: node, root: true }).length === 0 && temp.push(node));
+    } else if (query.prototype instanceof HTMLElement) {
+      walkTree(shadowRoot, node => node instanceof query && temp.push(node));
+    } else if (type === 'function') {
+      walkTree(shadowRoot, node => query(node) && temp.push(node));
+    } else if (type === 'object') {
       const keys = Object.keys(query);
       if (keys.length === 0) {
         return temp;
       }
-      this.walk(
-        shadowRoot,
-        node => keys.every(key => node[key] === query[key]),
-        node => temp.push(node)
-      );
-    // Selector
-    } else if (typeof query === 'string') {
-      this.walk(
-        shadowRoot,
-        node => matches(node, query),
-        node => temp.push(node),
-        { skip: true }
-      );
+      walkTree(shadowRoot, node => keys.every(key => node[key] === query[key]) && temp.push(node));
+    } else if (type === 'string') {
+      walkTree(shadowRoot, node => {
+        if (matches(node, query)) {
+          temp.push(node)
+        }
+      });
     }
 
     return temp.map(n => new Wrapper(n, this.opts));
@@ -211,46 +203,25 @@ class Wrapper {
       throw e;
     });
   }
+}
 
-  walk (node, query, callback, opts = { root: false, skip: false }) {
-    // The ShadyDOM polyfill creates a shadow root that is a <div /> but is an
-    // instanceof a DocumentFragment. For some reason a tree walker can't
-    // traverse it, so we must traverse each child. Due to this implementation
-    // detail, we must also tell the walker to include the root node, which it
-    // doesn't do with the default implementation.
-    if (node instanceof DocumentFragment) {
-      slice.call(node.children).forEach(child => {
-        this.walk(child, query, callback, {
-          root: true,
-          skip: opts.skip
-        });
-      });
-      return;
-    }
+function mount (elem) {
+  return new Wrapper(elem);
+}
 
-    const acceptNode = node =>
-      query(node)
-        ? NodeFilter.FILTER_ACCEPT
-        : opts.skip ? NodeFilter.FILTER_SKIP : NodeFilter.FILTER_REJECT;
+function walk (elem, call) {
+  if (call(elem) !== false) {
+    return walkTree(elem, call);
+  }
+}
 
-    // IE requires a function, standards compliant browsers require an object.
-    acceptNode.acceptNode = acceptNode;
-
-    // Last argument here is for IE.
-    const tree = document.createTreeWalker(node, NodeFilter.SHOW_ELEMENT, acceptNode, true);
-
-    // Include the main node.
-    if (opts.root && query(node)) {
-      callback(node);
-    }
-
-    // Call user callback for each node.
-    while (tree.nextNode()) {
-      callback(tree.currentNode);
+function walkTree ({ childNodes }, call) {
+  for (const node of childNodes) {
+    if (walk(node, call) === false) {
+      return false;
     }
   }
 }
 
-export function mount (elem) {
-  return new Wrapper(elem);
-}
+module.exports.h = h;
+module.exports.mount = mount;
