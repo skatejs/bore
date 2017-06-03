@@ -23,22 +23,22 @@ console.log(wrapper.one('span').node.localName);
 
 
 
-## Using with web components
+## Testing with Jest / JSDOM / Node
+
+Currently JSDOM doesn't have web component support, so you're limited to testing non-web-component DOM in JSDOM and Jest's default configuration.
+
+To test your web components in Node or Jest, you'll have to use [@skatejs/ssr](https://github.com/skatejs/ssr#testing-in-node). More information there. For a working example, see [this gist](https://gist.github.com/treshugart/719dad9c3be6e048b9563309cf37d3c1).
+
+
+
+## Notes about web components
 
 Since web components are an extension of the HTML standard, Bore inherently works with it. However there are a few things that it does underneath the hood that should be noted.
 
-1. The custom element polyfill is supported by calling `flush()` after mounting the nodes so things appear synchronous.
-2. Nodes are mounted to a fixture that is always kept in the DOM (even if it's removed, it will put itself back). This is so that custom elements can go through their natural lifecycle.
-3. The fixture is cleaned up on every mount, so there's no need to cleanup after your last mount.
-4. The `attachShadow()` method is overridden to *always* provide an `open` shadow root so that there is always a `shadowRoot` property and it can be queried against.
-
-
-
-## Testing with Jest / JSDOM / Node
-
-Currently JSDOM doesn't have web component support, so you're limited to testing non-web-component DOM in JSDOM, or Jest out of the box.
-
-To test your web components in Node or Jest, you'll have to use [`@skatejs/ssr`](https://github.com/skatejs/ssr#testing-in-node). Instructions are there.
+- The custom element polyfill, if detected, is supported by calling `flush()` after mounting the nodes so things appear synchronous.
+- Nodes are mounted to a fixture that is always kept in the DOM (even if it's removed, it will put itself back). This is so that custom elements can go through their natural lifecycle.
+- The fixture is cleaned up on every mount, so there's no need to cleanup after your last mount.
+- The `attachShadow()` method is overridden to *always* provide an `open` shadow root so that there is always a `shadowRoot` property and it can be queried against.
 
 
 
