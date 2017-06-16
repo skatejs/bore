@@ -61,7 +61,7 @@ function getInstantiatedNodeWithinFixture (node, isRootNode) {
   }
 
   return isStringNode
-    ? fixture.firstElementChild
+    ? fixture.children[0]
     : node;
 }
 

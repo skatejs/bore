@@ -74,7 +74,11 @@ describe('bore', () => {
     expect(mount(<div><span /></div>).one(<span />).node.nodeName).toEqual('SPAN');
   });
 
-  hasCustomElements && it('mount: should descend into custom elements', () => {
+  it('mount(string)', () => {
+    expect(mount('<div><span></span></div>').has({ localName: 'span' })).toEqual(true);
+  });
+
+  hasCustomElements && it('mount(node): should descend into custom elements', () => {
     class Test extends HTMLElement {
       connectedCallback () {
         this.attachShadow({ mode: 'open' });
@@ -82,9 +86,20 @@ describe('bore', () => {
       }
     }
     customElements.define('x-test-1', Test);
-    const test = mount(<Test />);
-    const coll = test.one({ nodeName: 'SPAN' });
-    expect(coll.node.nodeName).toEqual('SPAN');
+    expect(mount(<Test />).has({ localName: 'span' })).toBe(true);
+  });
+
+  hasCustomElements && it('mount(string): should descend into custom elements', () => {
+    class Test extends HTMLElement {
+      connectedCallback () {
+        if (!this.shadowRoot) {
+          this.attachShadow({ mode: 'open' });
+          this.shadowRoot.innerHTML = '<span></span>';
+        }
+      }
+    }
+    customElements.define('x-test-2', Test);
+    expect(mount('<x-test-2></x-test-2>').has({ localName: 'span' })).toBe(true);
   });
 });
 
