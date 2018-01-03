@@ -32,7 +32,7 @@ console.log(wrapper.one('span').node.localName);
 
 Currently JSDOM doesn't have web component support, so you're limited to testing non-web-component DOM in JSDOM and Jest's default configuration.
 
-To test your web components in Node or Jest, you'll have to use [@skatejs/ssr](https://github.com/skatejs/ssr#testing-in-node). More information there. For a working example, see [this gist](https://gist.github.com/treshugart/719dad9c3be6e048b9563309cf37d3c1).
+To test your web components in Node or Jest, you'll have to use [@skatejs/ssr](https://github.com/skatejs/skatejs/tree/master/packages/ssr). More information there.
 
 
 
