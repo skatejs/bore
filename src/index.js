@@ -15,12 +15,12 @@ const fixture = document.createElement('div');
 document.body.appendChild(fixture);
 
 // Override to force mode "open" so we can query against all shadow roots.
-HTMLElement.prototype.attachShadow = function () {
+HTMLElement.prototype.attachShadow = function() {
   return attachShadow.call(this, { mode: 'open' });
 };
 
 // Ensures polyfill operations are run sync.
-function flush () {
+function flush() {
   if (customElements && typeof customElements.flush === 'function') {
     customElements.flush();
   }
@@ -31,24 +31,22 @@ function flush () {
 // 1. Native
 // 2. Non-compliant browers
 // 3. JSDOM or environments that only implement querySelector
-function matches (node, query) {
-  return (
-    node.matches = 
-    node.matchesSelector || 
+function matches(node, query) {
+  return (node.matches =
+    node.matchesSelector ||
     node.mozMatchesSelector ||
-    node.msMatchesSelector || 
-    node.oMatchesSelector || 
+    node.msMatchesSelector ||
+    node.oMatchesSelector ||
     node.webkitMatchesSelector ||
     function(s) {
       const matches = (this.document || this.ownerDocument).querySelectorAll(s);
       let i = matches.length;
       while (--i >= 0 && matches.item(i) !== this) {}
-      return i > -1;            
-    }
-  ).call(node, query);
+      return i > -1;
+    }).call(node, query);
 }
 
-function getInstantiatedNodeWithinFixture (node, isRootNode) {
+function getInstantiatedNodeWithinFixture(node, isRootNode) {
   const isStringNode = typeof node === 'string';
 
   // If the fixture has been removed from the document, re-insert it.
@@ -60,23 +58,21 @@ function getInstantiatedNodeWithinFixture (node, isRootNode) {
     setFixtureContent(node, isStringNode);
   }
 
-  return isStringNode
-    ? fixture.children[0]
-    : node;
+  return isStringNode ? fixture.children[0] : node;
 }
 
-function setFixtureContent (node, shouldSetChildrenViaString) {
+function setFixtureContent(node, shouldSetChildrenViaString) {
   // If this is a new node, clean up the fixture.
   fixture.innerHTML = '';
 
   // Add the node to the fixture so it runs the connectedCallback().
   shouldSetChildrenViaString
     ? (fixture.innerHTML = node)
-    : (fixture.appendChild(node));
+    : fixture.appendChild(node);
 }
 
 class Wrapper {
-  constructor (node, opts = {}) {
+  constructor(node, opts = {}) {
     const isRootNode = !node.parentNode;
 
     this.opts = opts;
@@ -88,18 +84,23 @@ class Wrapper {
     }
   }
 
-  get shadowRoot () {
+  get shadowRoot() {
     const { node } = this;
     return node.shadowRoot || node;
   }
 
-  all (query) {
+  all(query) {
     const { shadowRoot } = this;
     const type = typeof query;
     let temp = [];
 
     if (query.nodeType === Node.ELEMENT_NODE) {
-      walkTree(shadowRoot, node => diff({ destination: query, source: node, root: true }).length === 0 && temp.push(node));
+      walkTree(
+        shadowRoot,
+        node =>
+          diff({ destination: query, source: node, root: true }).length === 0 &&
+          temp.push(node)
+      );
     } else if (query.prototype instanceof HTMLElement) {
       walkTree(shadowRoot, node => node instanceof query && temp.push(node));
     } else if (type === 'function') {
@@ -109,11 +110,14 @@ class Wrapper {
       if (keys.length === 0) {
         return temp;
       }
-      walkTree(shadowRoot, node => keys.every(key => node[key] === query[key]) && temp.push(node));
+      walkTree(
+        shadowRoot,
+        node => keys.every(key => node[key] === query[key]) && temp.push(node)
+      );
     } else if (type === 'string') {
       walkTree(shadowRoot, node => {
         if (matches(node, query)) {
-          temp.push(node)
+          temp.push(node);
         }
       });
     }
@@ -121,19 +125,19 @@ class Wrapper {
     return temp.map(n => new Wrapper(n, this.opts));
   }
 
-  has (query) {
+  has(query) {
     return !!this.one(query);
   }
 
-  one (query) {
+  one(query) {
     return this.all(query)[0];
   }
 
-  wait (func) {
+  wait(func) {
     return this.waitFor(wrap => !!wrap.node.shadowRoot).then(func);
   }
 
-  waitFor (func, { delay } = { delay: 1 }) {
+  waitFor(func, { delay } = { delay: 1 }) {
     return new Promise((resolve, reject) => {
       const check = () => {
         const ret = (() => {
@@ -156,17 +160,16 @@ class Wrapper {
   }
 }
 
-function mount (elem) {
+function mount(elem) {
   return new Wrapper(elem);
 }
 
-function walk (elem, call) {
-  if (call(elem) !== false) {
-    return walkTree(elem, call);
-  }
+function walk(elem, call) {
+  call(elem);
+  return walkTree(elem, call);
 }
 
-function walkTree ({ childNodes }, call) {
+function walkTree({ childNodes }, call) {
   for (const node of childNodes) {
     if (walk(node, call) === false) {
       return false;
