@@ -2,16 +2,16 @@
 # yarn lockfile v1
 
 
-"@skatejs/ssr@^0.5.1":
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/@skatejs/ssr/-/ssr-0.5.1.tgz#230d098695a355cdb15d114b153be727749d4d36"
+"@skatejs/ssr@0.5.2":
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/@skatejs/ssr/-/ssr-0.5.2.tgz#569c53e3d896fd35a510cdd7ab366734f1384d94"
   dependencies:
     parse5 "^3.0.2"
     preact "^8.1.0"
     skatejs "^5.0.0-alpha.7"
     undom "^0.3.3"
 
-"@skatejs/val@^0.3.1":
+"@skatejs/val@0.3.1":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@skatejs/val/-/val-0.3.1.tgz#1e043fdcd22ac3d1deab69ef7432314f38ce9f98"
 
@@ -3422,7 +3422,7 @@ jest-validate@^20.0.3:
     leven "^2.1.0"
     pretty-format "^20.0.3"
 
-jest@^20.0.4:
+jest@20.0.4:
   version "20.0.4"
   resolved "https://registry.yarnpkg.com/jest/-/jest-20.0.4.tgz#3dd260c2989d6dad678b1e9cc4d91944f6d602ac"
   dependencies:
@@ -4181,7 +4181,7 @@ number-is-nan@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
 
-nwb@^0.16.3:
+nwb@0.16.3:
   version "0.16.3"
   resolved "https://registry.yarnpkg.com/nwb/-/nwb-0.16.3.tgz#f9f609d2ac6a2fbd4fa975988c640e1583f19fee"
   dependencies:
@@ -6000,7 +6000,7 @@ webpack-merge@4.1.0:
   dependencies:
     lodash "^4.17.4"
 
-webpack-node-externals@^1.6.0:
+webpack-node-externals@1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/webpack-node-externals/-/webpack-node-externals-1.6.0.tgz#232c62ec6092b100635a3d29d83c1747128df9bd"
 

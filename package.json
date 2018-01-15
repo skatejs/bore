@@ -15,11 +15,11 @@
     "skatejs-dom-diff": "^0.4.2"
   },
   "devDependencies": {
-    "@skatejs/ssr": "^0.5.1",
-    "@skatejs/val": "^0.3.1",
-    "jest": "^20.0.4",
-    "nwb": "^0.16.3",
-    "webpack-node-externals": "^1.6.0"
+    "@skatejs/ssr": "0.5.2",
+    "@skatejs/val": "0.3.1",
+    "jest": "20.0.4",
+    "nwb": "0.16.3",
+    "webpack-node-externals": "1.6.0"
   },
   "repository": {
     "type": "git",
