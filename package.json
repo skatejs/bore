@@ -12,7 +12,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "skatejs-dom-diff": "^0.4.2"
+    "skatejs-dom-diff": "^1.0.0"
   },
   "devDependencies": {
     "@skatejs/ssr": "0.19.0",
