@@ -26,9 +26,9 @@
     undom "^0.3.3"
     yargs "^9.0.1"
 
-"@skatejs/val@0.3.1":
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/@skatejs/val/-/val-0.3.1.tgz#1e043fdcd22ac3d1deab69ef7432314f38ce9f98"
+"@skatejs/val@0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@skatejs/val/-/val-0.4.0.tgz#fc28fe75d6559625ccb79ae93c9ffcad8cc08a94"
 
 "@types/node@^6.0.46":
   version "6.0.78"
