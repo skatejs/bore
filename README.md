@@ -1,3 +1,5 @@
+___This has been moved to the [skatejs](https://github.com/skatejs/skatejs) monorepo!___
+
 # bore
 
 [Enzyme](https://github.com/airbnb/enzyme)-like testing utility built for the DOM and Web Components, that works both on the server and in browsers.
