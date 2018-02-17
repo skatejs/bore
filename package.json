@@ -17,7 +17,7 @@
   "devDependencies": {
     "@skatejs/ssr": "0.19.0",
     "@skatejs/val": "0.3.1",
-    "jest": "20.0.4",
+    "jest": "22.1.4",
     "nwb": "0.16.3",
     "webpack-node-externals": "1.6.0"
   },
