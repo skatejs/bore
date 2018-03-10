@@ -18,7 +18,7 @@
     "@skatejs/ssr": "0.19.0",
     "@skatejs/val": "0.3.1",
     "jest": "20.0.4",
-    "nwb": "0.16.3",
+    "nwb": "0.21.5",
     "webpack-node-externals": "1.6.0"
   },
   "repository": {
