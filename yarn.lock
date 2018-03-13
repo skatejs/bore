@@ -34,6 +34,18 @@
   version "6.0.78"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.78.tgz#5d4a3f579c1524e01ee21bf474e6fba09198f470"
 
+"@webcomponents/custom-elements@https://github.com/webcomponents/custom-elements/archive/36451e1.tar.gz":
+  version "1.0.0-alpha.3"
+  resolved "https://github.com/webcomponents/custom-elements/archive/36451e1.tar.gz#9e4ca448c773040cf099c0edf49491f866e222e7"
+
+"@webcomponents/shadycss@https://github.com/webcomponents/shadycss/archive/bea402d.tar.gz":
+  version "0.0.1"
+  resolved "https://github.com/webcomponents/shadycss/archive/bea402d.tar.gz#421871c681610899ba10a433e4c920c9a31f4666"
+
+"@webcomponents/template@https://github.com/webcomponents/template/archive/60d743e.tar.gz":
+  version "0.0.1"
+  resolved "https://github.com/webcomponents/template/archive/60d743e.tar.gz#0455f7092d31c866e5ee9b6c0072f1a3f032e314"
+
 abab@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/abab/-/abab-1.0.3.tgz#b81de5f7274ec4e756d797cd834f303642724e5d"
@@ -210,6 +222,13 @@ array-slice@^0.2.3:
 array-unique@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/array-unique/-/array-unique-0.2.1.tgz#a1d97ccafcbc2625cc70fadceb36a50c58b01a53"
+
+array.from@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/array.from/-/array.from-1.0.3.tgz#cb586aad92067f341229f41e0ed643281dba56b7"
+  dependencies:
+    define-properties "^1.1.2"
+    es-abstract "^1.6.1"
 
 arraybuffer.slice@0.0.6:
   version "0.0.6"
@@ -1591,6 +1610,10 @@ clone@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/clone/-/clone-1.0.2.tgz#260b7a99ebb1edfe247538175f783243cb19d149"
 
+cloudydom@^1.0.1:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/cloudydom/-/cloudydom-1.0.7.tgz#bec4952d70ee186a8467fee895678534a190f029"
+
 co@^4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/co/-/co-4.6.0.tgz#6ea6bdf3d853ae54ccb8e47bfa0bf3f9031fb184"
@@ -2334,6 +2357,10 @@ es-to-primitive@^1.1.1:
     is-date-object "^1.0.1"
     is-symbol "^1.0.1"
 
+es6-promise@^4.0.5:
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/es6-promise/-/es6-promise-4.2.2.tgz#f722d7769af88bd33bc13ec6605e1f92966b82d9"
+
 es6-promise@~4.0.3:
   version "4.0.5"
   resolved "https://registry.yarnpkg.com/es6-promise/-/es6-promise-4.0.5.tgz#7882f30adde5b240ccfa7f7d78c548330951ae42"
@@ -2723,6 +2750,10 @@ function-bind@^1.0.2, function-bind@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/function-bind/-/function-bind-1.1.0.tgz#16176714c801798e4e8f2cf7f7529467bb4a5771"
 
+function-bind@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/function-bind/-/function-bind-1.1.1.tgz#a56899d3ea3c9bab874bb9773b7c5ede92f4895d"
+
 gauge@~2.7.1:
   version "2.7.1"
   resolved "https://registry.yarnpkg.com/gauge/-/gauge-2.7.1.tgz#388473894fe8be5e13ffcdb8b93e4ed0616428c7"
@@ -2903,6 +2934,10 @@ has-flag@^1.0.0:
 has-flag@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/has-flag/-/has-flag-2.0.0.tgz#e8207af1cc7b30d446cc70b734b5e8be18f88d51"
+
+has-symbols@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/has-symbols/-/has-symbols-1.0.0.tgz#ba1a8f1af2a0fc39650f5c850367704122063b44"
 
 has-unicode@^2.0.0:
   version "2.0.1"
@@ -4612,9 +4647,18 @@ object-inspect@^1.1.0:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/object-inspect/-/object-inspect-1.2.1.tgz#3b62226eb8f6d441751c7d8f22a20ff80ac9dc3f"
 
-object-keys@^1.0.8, object-keys@^1.0.9:
+object-keys@^1.0.11, object-keys@^1.0.8, object-keys@^1.0.9:
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/object-keys/-/object-keys-1.0.11.tgz#c54601778ad560f1142ce0e01bcca8b56d13426d"
+
+object.assign@^4.0.4:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/object.assign/-/object.assign-4.1.0.tgz#968bf1100d7956bb3ca086f006f846b3bc4008da"
+  dependencies:
+    define-properties "^1.1.2"
+    function-bind "^1.1.1"
+    has-symbols "^1.0.0"
+    object-keys "^1.0.11"
 
 object.entries@^1.0.4:
   version "1.0.4"
@@ -5786,11 +5830,24 @@ signal-exit@^3.0.0, signal-exit@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
 
-skatejs-dom-diff@^0.4.2:
-  version "0.4.2"
-  resolved "https://registry.yarnpkg.com/skatejs-dom-diff/-/skatejs-dom-diff-0.4.2.tgz#9f0406a6d6839c5505d79e75207a0e6a62a7f285"
+skatejs-dom-diff@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/skatejs-dom-diff/-/skatejs-dom-diff-1.0.0.tgz#96dd64818f05bebda6e1525ddfed2a5ea22db372"
   dependencies:
     object-assign "^4.0.1"
+    skatejs-web-components "^5.0.0"
+
+skatejs-web-components@^5.0.0:
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/skatejs-web-components/-/skatejs-web-components-5.2.1.tgz#5f21e2a4d6b19178a781574b862f8284e9cd021b"
+  dependencies:
+    "@webcomponents/custom-elements" "https://github.com/webcomponents/custom-elements/archive/36451e1.tar.gz"
+    "@webcomponents/shadycss" "https://github.com/webcomponents/shadycss/archive/bea402d.tar.gz"
+    "@webcomponents/template" "https://github.com/webcomponents/template/archive/60d743e.tar.gz"
+    array.from "^1.0.3"
+    cloudydom "^1.0.1"
+    es6-promise "^4.0.5"
+    object.assign "^4.0.4"
 
 slash@^1.0.0:
   version "1.0.0"
